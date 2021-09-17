@@ -44,7 +44,7 @@ class UpgradeWriteSectorWork : Work<Int> {
             doNext(mSectorDataList, mSectorAddrList,position)
             return
         }
-        onProgressChanged(position*22/90,"写入当前扇区数据(${dataCount}/${8})")
+        onProgressChanged(position*22/85,"写入当前扇区数据(${dataCount}/${8})")
         disposable?.dispose()
         disposable = Observable.timer(60, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.newThread())

@@ -15,15 +15,19 @@ class ReadUpgradeFileWork : Work<Int> {
 
     private var binFile:File
 
-    constructor(binFile:File,callback: Callback<Int>) : super(callback){
+    private var targetVersion:Int = 0
+
+    constructor(targetVersion:Int,binFile:File,callback: Callback<Int>) : super(callback){
         this.binFile = binFile
+        this.targetVersion = targetVersion
     }
 
     override fun doWork(vararg args: Any) {
-        if(!binFile.exists() || !binFile.name.toLowerCase().endsWith(".bin")){
+        if(!binFile.exists() || !binFile.name.toLowerCase().endsWith(".bin") || binFile.length() == 0L){
             cancel()
             onProgressChanged(100,"文件解析失败,请检查文件是否正确")
             callback?.onError(-8)
+            return
         }
         mSectorDataList.clear()
         mSectorAddrList.clear()
@@ -35,9 +39,31 @@ class ReadUpgradeFileWork : Work<Int> {
                         onProgressChanged(10,"文件解析成功")
                         doNext(mSectorDataList, mSectorAddrList,0)
                     } else {
-                        cancel()
-                        onProgressChanged(100,"文件解析失败,请检查文件是否正确")
+                        onProgressChanged(98,"文件解析失败,请检查文件是否正确")
                         callback?.onError(-8)
+                        BlastDelegate.getDelegate().getUpgradeExitLoader()
+                            .onUpgradeExit(targetVersion,object : Callback<Boolean>{
+                                override fun onResult(t: Boolean) {
+                                    if(t){
+                                        onProgressChanged(100,"文件解析失败,退出升级模式成功")
+                                        onDestroy()
+                                    } else {
+                                        onProgressChanged(100,"文件解析失败,退出升级模式失败")
+                                        callback?.onError(-7)
+                                        onDestroy()
+                                    }
+                                }
+
+                                override fun onError(errorCode: Int) {
+                                    onProgressChanged(100,"文件解析失败,退出升级模式失败")
+                                    callback?.onError(-7)
+                                    onDestroy()
+                                }
+
+                                override fun onRetryCountChanged(retryCount: Int, action: String) {
+                                    callback?.onRetryCountChanged(retryCount, action)
+                                }
+                            })
                     }
                 })
     }

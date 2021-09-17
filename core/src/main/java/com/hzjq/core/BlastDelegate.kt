@@ -31,8 +31,10 @@ class BlastDelegate {
             .setParseLoader(Parser())
             .setUpgradeExitLoader(UpgradeExitImpl())
             .setReceiveOutTime(5)
+            .setRetryCount(3)
             .setCmdType("B0")
             .setDelayWriteData(false)
+            .setMaxSupportCapCount(600)
     }
 
     companion object {
@@ -64,6 +66,13 @@ class BlastDelegate {
     }
 
     /**
+     * 支持的最大雷管数
+     */
+    fun getMaxSupportCapCount():Int{
+        return option.getMaxSupportCapCount()
+    }
+
+    /**
      * 是否写人延时
      */
     fun setDelayWriteData(isWrite:Boolean){
@@ -75,6 +84,14 @@ class BlastDelegate {
      */
     fun isDelayWriteData():Boolean{
         return option.isDelayWriteData()
+    }
+
+
+    /**
+     * 获取失败重试次数
+     */
+    fun getRetryCount():Int{
+        return option.getRetryCount()
     }
 
     /**

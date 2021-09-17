@@ -19,6 +19,7 @@ interface ProgressCallback<T> : Callback<T> {
     fun onProgressChanged(progress:Int,total:Int,action:String)
 
 
+
     /**
      * 失败回调onError方法
      */

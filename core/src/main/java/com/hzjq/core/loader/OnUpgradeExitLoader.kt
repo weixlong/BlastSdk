@@ -7,6 +7,6 @@ interface OnUpgradeExitLoader {
     /**
      * 退出升级模式
      */
-    fun onUpgradeExit(callback:Callback<Boolean>)
+    fun onUpgradeExit(targetVersion:Int,callback:Callback<Boolean>)
 
 }

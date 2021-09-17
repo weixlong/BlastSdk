@@ -137,12 +137,12 @@ class AssemblyCmd : AssemblyCmdLoader {
         )
     }
 
-    override fun getExitUpgradeModeCmd(): Cmd {
+    override fun getExitUpgradeModeCmd(targetVersion:Int): Cmd {
         return Cmd(
             CmdCode.OUT_UPGRADE_ASK,
             CmdCode.OUT_UPGRADE_E_ASK,
             CmdCode.OUT_UPGRADE_LEFT + BlastDelegate.getDelegate()
-                .getCmdType() + CmdCode.OUT_UPGRADE_RIGHT
+                .getCmdType() + CmdCode.OUT_UPGRADE_RIGHT+Convert.getCurrentDetonatorNum(targetVersion).toString()
         )
     }
 

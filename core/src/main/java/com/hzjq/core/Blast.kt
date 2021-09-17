@@ -47,8 +47,8 @@ class Blast {
      * 升级版本，文件件必须以.bin结尾，否则将不做升级
      * 版本升级中断，将会导致升级失败，芯片无法运行
      */
-    fun upgrade(binFile: File,callback: OnVersionUpgradeCallback){
-        BlastDelegate.getDelegate().getVersionUpgradeLoader().onVersionUpgrade(binFile, callback)
+    fun upgrade(targetVersion:Int,binFile: File,callback: OnVersionUpgradeCallback){
+        BlastDelegate.getDelegate().getVersionUpgradeLoader().onVersionUpgrade(targetVersion,binFile, callback)
     }
 
     /**
@@ -56,8 +56,8 @@ class Blast {
      * 如升级意外中断，必须调用退出升级才能继续正常使用
      * 正常升级完成后，不需要调用此方法，框架已处理升级成功或失败的情况
      */
-    fun exitUpgradeMode(callback: Callback<Boolean>){
-        BlastDelegate.getDelegate().getUpgradeExitLoader().onUpgradeExit(callback)
+    fun exitUpgradeMode(targetVersion:Int,callback: Callback<Boolean>){
+        BlastDelegate.getDelegate().getUpgradeExitLoader().onUpgradeExit(targetVersion,callback)
     }
 
     /**
@@ -71,6 +71,7 @@ class Blast {
     /**
      * 下传雷管信息
      * 将雷管数据写入芯片
+     * 下传前请从民爆服务器中获取密码，并设置到password属性中
      */
     fun underCap(): OnUnderCapLoader {
       return  BlastDelegate.getDelegate().getUnderCapLoader()
@@ -79,6 +80,7 @@ class Blast {
     /**
      * 雷管授权
      * onResult返回授权雷管结果
+     * 授权之前请先对雷管进行下传，否则会授权失败
      */
     fun authCap(): OnAuthCapLoader {
         return BlastDelegate.getDelegate().getAuthCapLoader()
@@ -102,9 +104,9 @@ class Blast {
 
 
     /**
-     * 一键授权
+     * 一键下传并授权
      */
-    fun quickCheckAuth():OnQuickCheckAuthLoader{
+    fun quickUnderAuth():OnQuickCheckAuthLoader{
        return BlastDelegate.getDelegate().getQuickCheckAuthLoader()
     }
 }

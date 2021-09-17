@@ -13,9 +13,12 @@ class CmdExeImpl : CmdExeLoader {
 
     private var pollDisposable: Disposable? = null
     private val openPortCallback = OpenPortCallback()
+    private var callback: Callback<Any>? = null
+    private var retryCount = 0
 
     override fun <T> exeOnceCmd(cmd: ByteArray, callback: Callback<T>?) {
         cancel()
+        this.callback = callback as Callback<Any>
         openPortCallback.isPoll = false
         openPortCallback.cmd = cmd
         BlastDelegate.getDelegate().getOnSendMessageLoader()
@@ -25,6 +28,7 @@ class CmdExeImpl : CmdExeLoader {
 
     override fun <T> exePollResultCmd(cmd: ByteArray, callback: Callback<T>?) {
         cancel()
+        this.callback = callback as Callback<Any>
         openPortCallback.isPoll = true
         openPortCallback.cmd = cmd
         BlastDelegate.getDelegate().getOnSendMessageLoader()
@@ -42,6 +46,15 @@ class CmdExeImpl : CmdExeLoader {
         ).subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
+                if(retryCount > 0){
+                    if(retryCount > BlastDelegate.getDelegate().getRetryCount()){
+                        callback?.onError(-10)
+                        cancel()
+                        return@subscribe
+                    }
+                    callback?.onRetryCountChanged(retryCount,"正在重试")
+                }
+                retryCount++
                 BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
             }
     }
@@ -63,9 +76,14 @@ class CmdExeImpl : CmdExeLoader {
         override fun onError(errorCode: Int) {
 
         }
+
+        override fun onRetryCountChanged(retryCount: Int, action: String) {
+
+        }
     }
 
     override fun cancel() {
+        retryCount = 0
         pollDisposable?.dispose()
     }
 }

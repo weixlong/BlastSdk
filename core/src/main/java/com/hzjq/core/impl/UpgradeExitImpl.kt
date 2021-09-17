@@ -8,7 +8,7 @@ import com.hzjq.core.worker.UpgradeExitModeWork
 
 class UpgradeExitImpl : OnUpgradeExitLoader {
 
-    override fun onUpgradeExit(callback: Callback<Boolean>) {
+    override fun onUpgradeExit(targetVersion:Int,callback: Callback<Boolean>) {
         Works.Builder.newBuilder()
             .addWork(UpgradeExitModeWork(object : Callback<Int>{
                 override fun onResult(t: Int) {
@@ -22,6 +22,10 @@ class UpgradeExitImpl : OnUpgradeExitLoader {
                 override fun onError(errorCode: Int) {
                     callback.onResult(false)
                     callback.onError(errorCode)
+                }
+
+                override fun onRetryCountChanged(retryCount: Int, action: String) {
+                    callback.onRetryCountChanged(retryCount, action)
                 }
             })).build().queue()
     }

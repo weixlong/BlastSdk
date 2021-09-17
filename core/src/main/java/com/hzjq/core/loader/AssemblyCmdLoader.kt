@@ -92,7 +92,7 @@ interface AssemblyCmdLoader {
     /**
      * 获取退出升级模式命令
      */
-    fun getExitUpgradeModeCmd(): Cmd
+    fun getExitUpgradeModeCmd(targetVersion:Int): Cmd
 
     /**
      * 获取充电时循环查询指令

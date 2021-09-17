@@ -8,11 +8,11 @@ import java.io.File
 
 class VersionUpgradeImpl : OnVersionUpgradeLoader {
 
-    override fun onVersionUpgrade(binFile: File, callback: OnVersionUpgradeCallback) {
+    override fun onVersionUpgrade(targetVersion:Int,binFile: File, callback: OnVersionUpgradeCallback) {
         Works.Builder.newBuilder()
             .addWork(UpgradeInnerModeWork(callback))
-            .addWork(ReadUpgradeFileWork(binFile,callback))
-            .addWork(UpgradeSendAddressWork(callback))
+            .addWork(ReadUpgradeFileWork(targetVersion,binFile,callback))
+            .addWork(UpgradeSendAddressWork(targetVersion,callback))
             .addWork(UpgradeWriteSectorWork(callback))
             .addWork(UpgradeWriteSectorEndWork(callback))
             .build()

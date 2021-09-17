@@ -17,15 +17,18 @@ class UpgradeSendAddressWork : Work<Int> {
     private val maxArrdessNum = 22 // 起爆器总页数
     private var position = 0 //当前页数
     private var curAddressData = ""
+    private var targetVersion:Int = 0
 
-    constructor(callback: Callback<Int>) : super(callback)
+    constructor(targetVersion:Int,callback: Callback<Int>) : super(callback){
+        this.targetVersion = targetVersion
+    }
 
     override fun doWork(vararg args: Any) {
         if (args.size >= 3) {
             val mSectorDataList = args[0] as ArrayList<String>// 扇区数据
             val mSectorAddrList = args[1] as ArrayList<String>// 扇区地址
             position = args[3] as Int
-            onProgressChanged(position*22/90,"写入当前扇区地址(${position}/${mSectorAddrList.size})")
+            onProgressChanged(position*22/82,"写入当前扇区地址(${position}/${mSectorAddrList.size})")
             if (mSectorAddrList.size > position) {
                 curAddressData = mSectorAddrList[position]
                 Receives.getInstance().registerReceiver(
@@ -45,12 +48,12 @@ class UpgradeSendAddressWork : Work<Int> {
                                         doNext(*args,position)
                                     }
                                     "82" -> {//跳过这个地址，进行下一个地址写入
-                                        onProgressChanged(position*22/90,"跳过当前扇区地址(${position}/${mSectorAddrList.size})")
+                                        onProgressChanged(position*22/82,"跳过当前扇区地址(${position}/${mSectorAddrList.size})")
                                         position++
                                         retry(*args)
                                     }
                                     else -> {
-                                        onProgressChanged(position*22/90,"重试当前扇区地址(${position}/${mSectorAddrList.size})")
+                                        onProgressChanged(position*22/82,"重试当前扇区地址(${position}/${mSectorAddrList.size})")
                                         retry(*args)//失败重试
                                     }
                                 }
@@ -72,7 +75,7 @@ class UpgradeSendAddressWork : Work<Int> {
                     .exePollResultCmd(msg.assembly(), callback)
             } else {
                 BlastDelegate.getDelegate().getUpgradeExitLoader()
-                    .onUpgradeExit(object : Callback<Boolean>{
+                    .onUpgradeExit(targetVersion,object : Callback<Boolean>{
                         override fun onResult(t: Boolean) {
                             if(t){
                                 onProgressChanged(98,"退出升级模式成功")
@@ -88,6 +91,10 @@ class UpgradeSendAddressWork : Work<Int> {
                             onProgressChanged(100,"退出升级模式失败")
                             callback?.onError(-7)
                             onDestroy()
+                        }
+
+                        override fun onRetryCountChanged(retryCount: Int, action: String) {
+                            callback?.onRetryCountChanged(retryCount, action)
                         }
                     })
             }

@@ -9,5 +9,5 @@ interface OnVersionUpgradeLoader {
     /**
      * 起爆器升级
      */
-    fun onVersionUpgrade(binFile: File, callback: OnVersionUpgradeCallback)
+    fun onVersionUpgrade(targetVersion:Int,binFile: File, callback: OnVersionUpgradeCallback)
 }

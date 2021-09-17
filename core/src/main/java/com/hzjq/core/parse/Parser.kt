@@ -3,6 +3,9 @@ package com.hzjq.core.parse
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.bean.CapEntity
+import com.hzjq.core.bean.CapProgressEntity
+import com.hzjq.core.util.Convert
 import com.sdk.DeviceManager_LXR5000.util.ByteUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,5 +56,26 @@ class Parser : ParseLoader {
             .doOnError {
                 onNext.accept(false)
             }.subscribe(onNext)
+    }
+
+    override fun parseScanProgress(msg: String): CapProgressEntity {
+        val errorCode: String = msg.substring(20, 22)
+        val progress = Integer.valueOf(msg.substring(22, 24), 16)
+        val total = Integer.valueOf(msg.substring(24, 28), 16)
+        val stateCode = Integer.valueOf(msg.substring(28, 30), 16)
+        val mVoltage = Integer.valueOf(msg.substring(12, 16), 16)
+        val mElectric = Integer.valueOf(msg.substring(16, 20), 16)
+        return CapProgressEntity(errorCode,progress,total,stateCode,mVoltage*1.0/10,mElectric*1.0/10)
+    }
+
+    override fun parseCap(msg: String): CapEntity {
+        val item = CapEntity()
+        item.capNumber = Integer.valueOf(msg.substring(12, 16), 16).toString()
+        item.uid = msg.substring(20, 36)
+        item.delay = Integer.valueOf(msg.substring(44, 48), 16).toString()
+        item.holeNumber = msg.substring(48, 52)
+        item.status = Convert.HexToBin8(msg.substring(52, 54))
+        item.total = Integer.valueOf(msg.substring(16, 20), 16)
+        return item
     }
 }

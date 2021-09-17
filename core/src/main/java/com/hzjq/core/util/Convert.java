@@ -444,4 +444,18 @@ public class Convert {
         return number;
     }
 
+
+    /**
+     * 将十六进制串转换为二进制
+     */
+    public static String HexToBin8(String hexStr) {
+        int ten = Integer.parseInt(hexStr, 16);
+        String binStr = Integer.toBinaryString(ten);
+        if (binStr.length() < 8) {
+            for (int i = binStr.length(); i < 8; i++) {
+                binStr = "0" + binStr;
+            }
+        }
+        return binStr;
+    }
 }

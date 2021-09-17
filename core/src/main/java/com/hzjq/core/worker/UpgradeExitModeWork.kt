@@ -10,7 +10,11 @@ import com.hzjq.core.work.Work
 
 class UpgradeExitModeWork : Work<Int> {
 
-    constructor(callback: Callback<Int>) : super(callback)
+    private var targetVersion:Int = 0
+
+    constructor(targetVersion:Int,callback: Callback<Int>) : super(callback){
+        this.targetVersion = targetVersion
+    }
 
 
     override fun doWork(vararg args: Any) {
@@ -24,7 +28,7 @@ class UpgradeExitModeWork : Work<Int> {
     private fun exitUpgradeMode() {
         Receives.getInstance().registerReceiver(
             BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                .getExitUpgradeModeCmd()
+                .getExitUpgradeModeCmd(targetVersion)
             , object : Receiver {
                 override fun convert(msg: String): Any {
                     return BlastDelegate.getDelegate().getParseLoader().parseUpgradeModeMsg(msg)
@@ -50,7 +54,7 @@ class UpgradeExitModeWork : Work<Int> {
             })
         val msg = DataMessageBean(
             BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                .getExitUpgradeModeCmd().cmd
+                .getExitUpgradeModeCmd(targetVersion).cmd
         )
         BlastDelegate.getDelegate().getCmdExeLoader()
             .exePollResultCmd(msg.assembly(), callback)
@@ -59,7 +63,7 @@ class UpgradeExitModeWork : Work<Int> {
     override fun cancel() {
         Receives.getInstance().unRegisterReceiver(
             BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                .getExitUpgradeModeCmd()
+                .getExitUpgradeModeCmd(targetVersion)
         )
     }
 }
