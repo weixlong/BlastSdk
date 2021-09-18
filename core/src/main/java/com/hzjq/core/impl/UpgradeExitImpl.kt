@@ -10,7 +10,7 @@ class UpgradeExitImpl : OnUpgradeExitLoader {
 
     override fun onUpgradeExit(targetVersion:Int,callback: Callback<Boolean>) {
         Works.Builder.newBuilder()
-            .addWork(UpgradeExitModeWork(object : Callback<Int>{
+            .addWork(UpgradeExitModeWork(targetVersion,object : Callback<Int>{
                 override fun onResult(t: Int) {
                     if(t == AckCode.EXIT_UPGRADE_MODE_OK){
                         callback.onResult(true)

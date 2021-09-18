@@ -97,6 +97,7 @@ class Blast {
 
     /**
      * 爆破
+     * 爆破前请先完成充电操作
      */
     fun blast(): OnBlastLoader {
       return  BlastDelegate.getDelegate().getBlastLoader()
@@ -106,7 +107,7 @@ class Blast {
     /**
      * 一键下传并授权
      */
-    fun quickUnderAuth():OnQuickCheckAuthLoader{
-       return BlastDelegate.getDelegate().getQuickCheckAuthLoader()
+    fun quickUnderAuth():OnQuickUnderAuthLoader{
+       return BlastDelegate.getDelegate().getQuickUnderAuthLoader()
     }
 }

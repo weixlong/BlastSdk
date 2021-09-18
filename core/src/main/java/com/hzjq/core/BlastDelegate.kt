@@ -20,7 +20,7 @@ class BlastDelegate {
         option.setAuthCapLoader(AuthCapImpl())
             .setBlastLoader(BlastImpl())
             .setChargeLoader(ChargeImpl())
-            .setQuickCheckAuthLoader(QuickCheckAuthImpl())
+            .setQuickUnderAuthLoader(QuickUnderAuthImpl())
             .setScanCapLoader(ScanCapImpl())
             .setUnderCapLoader(UnderCapImpl())
             .setVersionLoader(VersionImpl())
@@ -35,6 +35,7 @@ class BlastDelegate {
             .setCmdType("B0")
             .setDelayWriteData(false)
             .setMaxSupportCapCount(600)
+            .setBlastOutTime(8000)
     }
 
     companion object {
@@ -77,6 +78,13 @@ class BlastDelegate {
      */
     fun setDelayWriteData(isWrite:Boolean){
         option.setDelayWriteData(isWrite)
+    }
+
+    /**
+     * 起爆超时时间
+     */
+    fun getBlastOutTime():Long{
+        return option.getBlastOutTime()
     }
 
     /**
@@ -164,8 +172,8 @@ class BlastDelegate {
     /**
      * 获取一键起爆器
      */
-    fun getQuickCheckAuthLoader(): OnQuickCheckAuthLoader {
-        return option.getQuickCheckAuthLoader()
+    fun getQuickUnderAuthLoader(): OnQuickUnderAuthLoader {
+        return option.getQuickUnderAuthLoader()
     }
 
     /**

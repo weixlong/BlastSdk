@@ -11,10 +11,11 @@ class Option {
     private var isDelayWriteData = false//是否写入延时数据
     private var retryCount = 3//重试次数
     private var maxSupportCapCount = 600 //支持最大雷管数
+    private var blastOutTime = 8000L//起爆超市时间
     private lateinit var authCapLoader: OnAuthCapLoader
     private lateinit var blastLoader: OnBlastLoader
     private lateinit var chargeLoader: OnChargeLoader
-    private lateinit var quickCheckAuthLoader: OnQuickCheckAuthLoader
+    private lateinit var quickUnderAuthLoader: OnQuickUnderAuthLoader
     private lateinit var scanCapLoader: OnScanCapLoader
     private lateinit var underCapLoader: OnUnderCapLoader
     private lateinit var versionLoader: OnVersionLoader
@@ -32,6 +33,15 @@ class Option {
 
     fun isDebug(): Boolean {
         return debug
+    }
+
+    fun setBlastOutTime(time: Long):Option{
+        this.blastOutTime = time
+        return this
+    }
+
+    fun getBlastOutTime():Long{
+        return blastOutTime
     }
 
     fun setMaxSupportCapCount(maxSupportCapCount:Int):Option{
@@ -130,14 +140,14 @@ class Option {
     }
 
 
-    fun setQuickCheckAuthLoader(quickCheckAuthLoader: OnQuickCheckAuthLoader): Option {
-        this.quickCheckAuthLoader = quickCheckAuthLoader
+    fun setQuickUnderAuthLoader(quickUnderAuthLoader: OnQuickUnderAuthLoader): Option {
+        this.quickUnderAuthLoader = quickUnderAuthLoader
         return this
     }
 
 
-    fun getQuickCheckAuthLoader(): OnQuickCheckAuthLoader {
-        return quickCheckAuthLoader
+    fun getQuickUnderAuthLoader(): OnQuickUnderAuthLoader {
+        return quickUnderAuthLoader
     }
 
 

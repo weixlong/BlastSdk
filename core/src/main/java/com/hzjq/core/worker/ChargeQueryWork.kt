@@ -33,7 +33,7 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
                                     onProgressChanged(msg.progress/2,"正在查询充电结果")
                                     retry()
                                 } else {
-                                  doNext()//查询雷管数据
+                                  doNext(0)//查询雷管数据
                                 }
                             } else {
                                 onProgressChanged(100,"查询充电结果失败")

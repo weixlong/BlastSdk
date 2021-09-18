@@ -9,8 +9,6 @@ open class CapProgressEntity {
     var mElectric = 0.0
     var isEnd = false//本次操作是否已结束
 
-
-
     constructor(
         errorCode: String,
         progress: Int,
@@ -141,6 +139,25 @@ open class CapProgressEntity {
 
             }
 
+            return stateCode
+        }
+
+
+        fun convertBlastError(stateCode: Int):Int{
+            when (stateCode) {
+                1 -> {//雷管使能异常
+                    return -58
+                }
+                2 -> {//雷管数量不对
+                    return -59
+                }
+                3 -> {//雷管状态错误
+                    return -60
+                }
+                4 -> {//起爆状态错误
+                    return -61
+                }
+            }
             return stateCode
         }
     }

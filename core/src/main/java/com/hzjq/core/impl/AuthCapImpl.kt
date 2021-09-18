@@ -1,7 +1,7 @@
 package com.hzjq.core.impl
 
 import com.hzjq.core.bean.CapProgressEntity
-import com.hzjq.core.callback.Callback
+import com.hzjq.core.callback.ProgressCallback
 import com.hzjq.core.loader.OnAuthCapLoader
 import com.hzjq.core.work.Works
 import com.hzjq.core.worker.AuthQueryWork
@@ -13,7 +13,7 @@ class AuthCapImpl : OnAuthCapLoader {
 
     private var works: Works? = null
 
-    override fun onAuthCap(callback: Callback<CapProgressEntity>) {
+    override fun onAuthCap(callback: ProgressCallback<CapProgressEntity>) {
         works = Works.Builder.newBuilder()
             .addWork(InnerAuthModeWork(callback))
             .addWork(AuthQueryWork(callback))

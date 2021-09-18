@@ -1,16 +1,27 @@
 package com.hzjq.core.impl
 
-import com.hzjq.core.bean.CapEntity
-import com.hzjq.core.bean.CapProgressEntity
-import com.hzjq.core.callback.Callback
+import com.hzjq.core.bean.CapResultEntity
+import com.hzjq.core.callback.ProgressCallback
 import com.hzjq.core.loader.OnBlastLoader
+import com.hzjq.core.work.Works
+import com.hzjq.core.worker.BlastQueryWork
+import com.hzjq.core.worker.BlastReadCapWork
+import com.hzjq.core.worker.BlastWork
 
 class BlastImpl : OnBlastLoader {
-    override fun onBlast(caps: List<CapEntity>, callback: Callback<CapProgressEntity>) {
-
+    
+    private var works:Works?=null
+    
+    override fun onBlast(callback: ProgressCallback<CapResultEntity>) {
+         works = Works.Builder.newBuilder()
+            .addWork(BlastWork(callback))
+            .addWork(BlastQueryWork(callback))
+            .addWork(BlastReadCapWork(callback))
+            .build()
+            .queue()
     }
 
     override fun cancel() {
-
+        works?.onDestroy()
     }
 }

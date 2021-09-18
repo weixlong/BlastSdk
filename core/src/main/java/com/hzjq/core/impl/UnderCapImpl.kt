@@ -3,6 +3,7 @@ package com.hzjq.core.impl
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.Callback
+import com.hzjq.core.callback.ProgressCallback
 import com.hzjq.core.loader.OnUnderCapLoader
 import com.hzjq.core.work.Works
 import com.hzjq.core.worker.*
@@ -11,7 +12,7 @@ class UnderCapImpl : OnUnderCapLoader {
 
     private var works: Works? = null
 
-    override fun onUnderCap(caps: MutableList<CapEntity>, callback: Callback<CapResultEntity>) {
+    override fun onUnderCap(caps: MutableList<CapEntity>, callback: ProgressCallback<CapResultEntity>) {
         val capCallback = object :Callback<CapEntity>{
             override fun onResult(t: CapEntity) {
 
