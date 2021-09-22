@@ -40,7 +40,7 @@ class VersionWork : Work<Int> {
                 })
         val msg =
             DataMessageBean(BlastDelegate.getDelegate().getAssemblyCmdLoader().getVersionCmd().cmd)
-        BlastDelegate.getDelegate().getCmdExeLoader().exeOnceCmd(msg.assembly(), callback)
+        BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(), callback)
     }
 
     override fun cancel() {

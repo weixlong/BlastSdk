@@ -2,14 +2,15 @@ package com.hzjq.core.work
 
 import android.text.TextUtils
 
-class Works private constructor(works: HashMap<String, Work<Any>>) {
+class Works private constructor(works: MutableList< Work<Any>>) {
 
-    private val works = HashMap<String, Work<Any>>()
+    private val works = arrayListOf<Work<Any>>()
     private var position = 0
 
     init {
         this.works.clear()
-        this.works.putAll(works)
+        this.works.addAll(works)
+        position = 0
     }
 
 
@@ -18,11 +19,11 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
      */
     fun queue(): Works {
         works.forEach {
-            it.value.setWorks(this)
+            it.setWorks(this)
         }
-        works.values
         if (works.size > position) {
-            works.values.toMutableList()[position].doWork()
+            val work = works[position]
+            work.doWork()
         }
         return this
     }
@@ -33,8 +34,8 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
      */
     internal fun doNextWork(vararg args: Any) {
         position++
-        if (works.size > position) {
-            works.values.toMutableList()[position].doWork(*args)
+        if (works.size > position&&position>=0) {
+            works[position].doWork(*args)
         }
     }
 
@@ -42,12 +43,11 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
      * 执行指定目标的任务
      */
     internal fun <work : Work<Any>> doTargetWork(clazz: Class<work>, vararg args: Any) {
-        val mutableList = works.values.toMutableList()
-        mutableList.forEachIndexed { index, work ->
+        works.forEachIndexed { index, work ->
             if (TextUtils.equals(clazz.name, work::class.java.name)) {
                 position = index
                 if (works.size > position) {
-                    mutableList[position].doWork(*args)
+                    works[position].doWork(*args)
                 }
                 return@forEachIndexed
             }
@@ -58,9 +58,8 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
      * 重新执行当前任务
      */
     fun retryCurWork(vararg args: Any) {
-        val mutableList = works.values.toMutableList()
         if (works.size > position) {
-            mutableList[position].doWork(*args)
+            works[position].doWork(*args)
         }
     }
 
@@ -69,7 +68,7 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
      */
     fun onDestroy() {
         works.forEach {
-            it.value.cancel()
+            it.cancel()
         }
         works.clear()
         position = 0
@@ -78,7 +77,7 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
 
     class Builder {
 
-        private val works = HashMap<String, Work<Any>>()
+        private val works = arrayListOf<Work<Any>>()
 
         private constructor() {
             works.clear()
@@ -94,7 +93,7 @@ class Works private constructor(works: HashMap<String, Work<Any>>) {
          * 添加一个待执行任务
          */
         fun <T : Any> addWork(work: Work<T>): Builder {
-            works[work::class.java.name] = work as Work<Any>
+            works.add(work as Work<Any>)
             return this
         }
 

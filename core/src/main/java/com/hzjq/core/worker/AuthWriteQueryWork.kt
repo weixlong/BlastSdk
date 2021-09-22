@@ -21,7 +21,7 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
             onProgressChanged(progress, "正在进行授权查询")
             Receives.getInstance()
                 .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                    .getAuthCycleQueryCmd(),
+                    .getWriteDelayCycleQueryCmd(),
                     object : Receiver {
                         override fun convert(msg: String): Any {
                             return BlastDelegate.getDelegate().getParseLoader()
@@ -30,7 +30,7 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
 
                         override fun onSuccess(msg: Any) {
                             if (msg is CapProgressEntity) {
-                                if (msg.stateCode == 0) {
+//                                if (msg.stateCode == 0) {
                                     if (msg.progress < 100) {
                                         callback?.onResult(msg)
                                         progress = 51 + msg.progress * 49 / 100
@@ -38,12 +38,13 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
                                     } else {
                                         msg.isEnd = true
                                         callback?.onResult(msg)
+                                        onProgressChanged(100, "授权查询完成")
                                     }
-                                } else {
-                                    onProgressChanged(100, "授权查询失败")
-                                    callback?.onError(CapProgressEntity.convertStateCode(msg.stateCode))
-                                    onDestroy()
-                                }
+//                                } else {
+//                                    onProgressChanged(100, "授权查询失败")
+//                                    callback?.onError(CapProgressEntity.convertStateCode(msg.stateCode))
+//                                    onDestroy()
+//                                }
                             }
                         }
 
@@ -57,7 +58,7 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
 
             val msg = DataMessageBean(
                 BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                    .getAuthCycleQueryCmd().cmd
+                    .getWriteDelayCycleQueryCmd().cmd
             )
             BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(), callback)
         }
@@ -66,7 +67,7 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
     override fun cancel() {
         Receives.getInstance()
             .unRegisterReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                .getAuthCycleQueryCmd())
+                .getWriteDelayCycleQueryCmd())
     }
 
 

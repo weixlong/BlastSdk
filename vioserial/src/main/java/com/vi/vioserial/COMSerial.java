@@ -175,7 +175,7 @@ public class COMSerial {
         BaseSerial baseSerial = mBaseSerials.get(portStr);
         if (baseSerial != null && baseSerial.isOpen()) {
             String dateTrim = hexData.trim().replace(" ", "");
-            baseSerial.sendHex(dateTrim);
+            baseSerial.sendHex(dateTrim.getBytes());
         } else {
             Logger.getInstace().e(TAG, "The serial port is closed or not initialized");
         }

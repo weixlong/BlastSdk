@@ -23,41 +23,46 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
                     }
 
                     override fun onSuccess(msg: Any) {
-                        if(msg is CapProgressEntity){
+                        if (msg is CapProgressEntity) {
                             if (msg.mElectric == 0.0 && msg.mVoltage == 0.0) {//充电异常
-                                doNext()//查询雷管数据
+                                doNext(0)//查询雷管数据
                                 return
                             }
-                            if(msg.stateCode == 0){
-                                if(msg.progress < 100){
-                                    onProgressChanged(msg.progress/2,"正在查询充电结果")
-                                    retry()
-                                } else {
-                                  doNext(0)//查询雷管数据
-                                }
+
+//                            if(msg.stateCode == 0){
+                            if (msg.progress < 100) {
+                                onProgressChanged(msg.progress / 2, "正在查询充电结果")
+                                retry()
                             } else {
-                                onProgressChanged(100,"查询充电结果失败")
-                                callback?.onError(CapProgressEntity.convertStateCode(msg.stateCode))
-                                onDestroy()
+                                doNext(0)//查询雷管数据
                             }
+//                            } else {
+//                                onProgressChanged(100,"查询充电结果失败")
+//                                callback?.onError(CapProgressEntity.convertStateCode(msg.stateCode))
+//                                onDestroy()
+//                            }
                         }
 
                     }
 
                     override fun failed() {
-                        onProgressChanged(100,"查询充电结果失败")
+                        onProgressChanged(100, "查询充电结果失败")
                         callback?.onError(-54)
                         onDestroy()
                     }
 
                 })
 
-        val msg = DataMessageBean(BlastDelegate.getDelegate().getAssemblyCmdLoader().getChargeCycleQueryCmd().cmd)
-        BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(),callback)
+        val msg = DataMessageBean(
+            BlastDelegate.getDelegate().getAssemblyCmdLoader().getChargeCycleQueryCmd().cmd
+        )
+        BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(), callback)
     }
 
     override fun cancel() {
         Receives.getInstance()
-            .unRegisterReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader().getChargeCycleQueryCmd())
+            .unRegisterReceiver(
+                BlastDelegate.getDelegate().getAssemblyCmdLoader().getChargeCycleQueryCmd()
+            )
     }
 }

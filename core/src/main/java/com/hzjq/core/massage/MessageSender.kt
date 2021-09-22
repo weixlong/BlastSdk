@@ -2,15 +2,15 @@ package com.hzjq.core.massage
 
 import android.text.TextUtils
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.bean.LogBean
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.loader.OnSendMessageLoader
 import com.hzjq.core.receive.Receives
 import com.hzjq.core.serial.BlastSerial
 import com.hzjq.core.serial.SerialManager
-import com.hzjq.core.util.BlastLog
 import com.vi.vioserial.listener.OnSerialDataListener
-import com.vi.vioserial.util.SerialDataUtils
 import io.reactivex.functions.Consumer
+import org.greenrobot.eventbus.EventBus
 
 class MessageSender : OnSendMessageLoader {
 
@@ -35,7 +35,7 @@ class MessageSender : OnSendMessageLoader {
 
     override fun sendData(msg: ByteArray) {
         val openPower = SerialManager.getInstance().isOpenPower()
-        if (!openPower) {
+        if (openPower) {
             val openPort = SerialManager.getInstance().isOpenPort()
             if (openPort) {
                 BlastSerial.instance()?.sendData(msg)
@@ -73,9 +73,9 @@ class MessageSender : OnSendMessageLoader {
         BlastSerial.instance()?.setSerialDataListener(object : OnSerialDataListener {
             override fun onSend(hexData: String?) {
                 if (BlastDelegate.getDelegate().isDebug()) {
-                    val data = SerialDataUtils.hexStringToString(hexData)
                     if (!TextUtils.isEmpty(hexData)) {
-                        BlastLog.d("receiveData:$data")
+                        val log = LogBean(hexData!!,1)
+                        EventBus.getDefault().post(log)
                     }
                 }
             }
@@ -87,10 +87,9 @@ class MessageSender : OnSendMessageLoader {
 
             override fun onReceiveFullData(hexData: String?) {
                 if (!hexData.isNullOrEmpty()) {
-                    if (BlastDelegate.getDelegate().isDebug()) {
-                        BlastLog.d("receiveData:$hexData")
-                        Receives.getInstance().findReceiverDoWork(hexData)
-                    }
+                    val log = LogBean(hexData,2)
+                    EventBus.getDefault().post(log)
+                    Receives.getInstance().findReceiverDoWork(hexData)
                 }
             }
 

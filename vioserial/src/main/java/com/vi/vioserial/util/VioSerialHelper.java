@@ -31,8 +31,8 @@ public abstract class VioSerialHelper {
     private ReadThread mReadThread;
 
     private boolean _isOpen = false;
-    private int iDelay = 10;
-    private int iGap = 10;
+    private long iDelay = 5;
+    private long iGap = 5;
 
     private String sPort;//Serial port
     private int iBaudRate;//baud rate
@@ -143,6 +143,11 @@ public abstract class VioSerialHelper {
             while (!isInterrupted()) {
                 try {
                     if (mInputStream == null) return;
+                    try {
+                        Thread.sleep(iGap);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     byte[] buffer = new byte[5];
                     int im = mInputStream.available();
                     if (im > 0) {
@@ -156,12 +161,6 @@ public abstract class VioSerialHelper {
                         parseData(hexString);
                     } else {
                         parseData(TAG_END);
-                    }
-
-                    try {
-                        Thread.sleep(iGap);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -244,11 +243,11 @@ public abstract class VioSerialHelper {
         this.mFlowCon = mFlowCon;
     }
 
-    public void setDelay(int delay) {
+    public void setDelay(long delay) {
         iDelay = delay;
     }
 
-    public void setGap(int gap) {
+    public void setGap(long gap) {
         iGap = gap;
     }
 

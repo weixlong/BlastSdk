@@ -28,6 +28,11 @@ public abstract class BaseSerial extends VioSerialHelper {
         super(sPort, iBaudRate);
     }
 
+    public void setSleepTime(long writeTime,long readTime){
+        setDelay(writeTime);
+        setGap(readTime);
+    }
+
     public abstract void onDataBack(String data);
 
     @SuppressLint("HandlerLeak")

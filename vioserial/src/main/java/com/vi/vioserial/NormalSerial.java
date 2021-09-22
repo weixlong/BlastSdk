@@ -148,7 +148,7 @@ public class NormalSerial {
      */
     public void sendHex(String hexData) {
         if (isOpen()) {
-            mBaseSerial.sendHex(hexData);
+            mBaseSerial.sendHex(hexData.getBytes());
         }
     }
 

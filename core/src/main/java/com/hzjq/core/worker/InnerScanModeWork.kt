@@ -12,20 +12,12 @@ import com.hzjq.core.work.Work
 /**
  * 进入扫描模式
  */
-class InnerScanModeWork : Work<CapEntity> {
+abstract class InnerScanModeWork : Work<CapEntity> {
 
-    private var caps: MutableList<CapEntity>? = null
-
-    constructor(caps: MutableList<CapEntity>?,callback: Callback<CapEntity>?) : super(callback){
-        this.caps = caps
-    }
+    constructor(callback: Callback<CapEntity>?) : super(callback)
 
     override fun doWork(vararg args: Any) {
-        if(caps.isNullOrEmpty()) {
-            onProgressChanged(2, "正在进入扫描模式")
-        } else {
-            onProgressChanged(30, "正在进入扫描模式")
-        }
+        onDoWorkStart()
         Receives.getInstance()
             .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader().getScanCmd(),
                 object : Receiver {
@@ -34,13 +26,7 @@ class InnerScanModeWork : Work<CapEntity> {
                     }
 
                     override fun onSuccess(msg: Any) {
-                        if(caps.isNullOrEmpty()) {
-                            onProgressChanged(3, "进入扫描模式成功")
-                            doNext(0)
-                        } else {
-                            onProgressChanged(30, "进入扫描模式成功")
-                            doNext(0,caps!!)
-                        }
+                        onInnerScanDoNext()
                     }
 
                     override fun failed() {
@@ -53,6 +39,11 @@ class InnerScanModeWork : Work<CapEntity> {
         val msg = DataMessageBean(BlastDelegate.getDelegate().getAssemblyCmdLoader().getScanCmd().cmd)
         BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(),callback)
     }
+
+
+    abstract fun onDoWorkStart()
+
+    abstract fun onInnerScanDoNext()
 
     override fun cancel() {
         Receives.getInstance()

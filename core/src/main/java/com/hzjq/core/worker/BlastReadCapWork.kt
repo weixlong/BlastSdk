@@ -4,6 +4,7 @@ import com.hzjq.core.BlastDelegate
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.Callback
+import com.hzjq.core.massage.DataMessageBean
 import com.hzjq.core.receive.Receiver
 import com.hzjq.core.receive.Receives
 import com.hzjq.core.work.Work
@@ -51,6 +52,9 @@ class BlastReadCapWork : Work<CapResultEntity> {
                 }
 
             })
+
+            val msg = DataMessageBean(BlastDelegate.getDelegate().getAssemblyCmdLoader().getReadCapCmd(position).cmd)
+            BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(),callback)
         }
     }
 

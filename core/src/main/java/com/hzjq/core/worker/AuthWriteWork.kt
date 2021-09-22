@@ -22,12 +22,12 @@ class AuthWriteWork : Work<CapProgressEntity> {
                 }
 
                 override fun onSuccess(msg: Any) {
-                    onProgressChanged(50,"正在写入授权信息成功")
-                    doNext()
+                    onProgressChanged(50,"写入授权信息成功")
+                    doNext(0)
                 }
 
                 override fun failed() {
-                    onProgressChanged(100,"正在写入授权信息失败")
+                    onProgressChanged(100,"写入授权信息失败")
                     callback?.onError(-51)
                     onDestroy()
                 }

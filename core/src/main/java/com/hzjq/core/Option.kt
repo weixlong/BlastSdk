@@ -8,10 +8,12 @@ class Option {
     private var cmdType = "B0" //起爆器类型  C0：采集器类型
     private var debug = false
     private var receiveOutTime = 5L//接收超时ms
-    private var isDelayWriteData = false//是否写入延时数据
+    private var isDelayWriteData = true//是否写入延时数据
     private var retryCount = 3//重试次数
     private var maxSupportCapCount = 600 //支持最大雷管数
     private var blastOutTime = 8000L//起爆超市时间
+    private var serialWriteSleepTime = 5L//写入时休眠时间
+    private var serialReadSleepTime = 5L//读取时的休眠时间
     private lateinit var authCapLoader: OnAuthCapLoader
     private lateinit var blastLoader: OnBlastLoader
     private lateinit var chargeLoader: OnChargeLoader
@@ -33,6 +35,24 @@ class Option {
 
     fun isDebug(): Boolean {
         return debug
+    }
+
+    fun setSerialWriteSleepTime(time: Long):Option{
+        this.serialWriteSleepTime = time
+        return this
+    }
+
+    fun getSerialWriteSleepTime():Long{
+        return serialWriteSleepTime
+    }
+
+    fun setSerialReadSleepTime(time: Long):Option{
+        this.serialReadSleepTime = time
+        return this
+    }
+
+    fun getSerialReadSleepTime():Long{
+        return serialReadSleepTime
     }
 
     fun setBlastOutTime(time: Long):Option{

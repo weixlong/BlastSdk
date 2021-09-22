@@ -33,10 +33,11 @@ class AssemblyCmd : AssemblyCmdLoader {
     }
 
     override fun getReadCapCmd(num: Int): Cmd {
+        val number: String = Convert.getCurrentDetonatorNum(num)
         return Cmd(
             CmdCode.KZB_READ_LG_INFO_ASK,
             "",
-            CmdCode.KZB_READ_LG_INFO_CMD
+            CmdCode.KZB_READ_LG_INFO_CMD+number
         )
     }
 

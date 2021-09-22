@@ -52,7 +52,9 @@ class UnderCapWork : Work<CapResultEntity> {
             doUnderCap()
         } else {
             if (isUnderOnly) {
-                onProgressChanged(100, "正在下传雷管信息")
+                onProgressChanged(100, "已完成下传雷管信息")
+                val t = CapResultEntity()
+                callback?.onResult(t)
             } else {
                 doNext(0,caps!!)
             }
@@ -87,9 +89,11 @@ class UnderCapWork : Work<CapResultEntity> {
     }
 
     override fun cancel() {
-        Receives.getInstance().unRegisterReceiver(
-            BlastDelegate.getDelegate()
-                .getAssemblyCmdLoader().getUnderCapCmd(position, caps!!)
-        )
+        if(!caps.isNullOrEmpty()) {
+            Receives.getInstance().unRegisterReceiver(
+                BlastDelegate.getDelegate()
+                    .getAssemblyCmdLoader().getUnderCapCmd(position, caps!!)
+            )
+        }
     }
 }

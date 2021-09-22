@@ -1,20 +1,36 @@
 package com.hzjq.core.cmd
 
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import com.hzjq.core.BlastDelegate
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.loader.CmdExeLoader
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class CmdExeImpl : CmdExeLoader {
 
-    private var pollDisposable: Disposable? = null
     private val openPortCallback = OpenPortCallback()
     private var callback: Callback<Any>? = null
     private var retryCount = 0
+    private val SEND_MSG_WHAT = 0x006785
+    private val handler = object : Handler(Looper.getMainLooper()){
+        override fun handleMessage(msg: Message) {
+            if(msg.what == SEND_MSG_WHAT) {
+                val cmd = msg.obj as ByteArray
+                if (retryCount > 0) {
+                    if (retryCount > BlastDelegate.getDelegate().getRetryCount()) {
+                        callback?.onError(-10)
+                        cancel()
+                        return
+                    }
+                    callback?.onRetryCountChanged(retryCount, "正在重试")
+                }
+                retryCount++
+                BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
+                startInterval(true,cmd)
+            }
+        }
+    }
 
     override fun <T> exeOnceCmd(cmd: ByteArray, callback: Callback<T>?) {
         cancel()
@@ -31,6 +47,7 @@ class CmdExeImpl : CmdExeLoader {
         this.callback = callback as Callback<Any>
         openPortCallback.isPoll = true
         openPortCallback.cmd = cmd
+        retryCount = 0
         BlastDelegate.getDelegate().getOnSendMessageLoader()
             .makeSurePortOpen(openPortCallback, callback)
     }
@@ -39,24 +56,16 @@ class CmdExeImpl : CmdExeLoader {
     /**
      * 开始轮询结果
      */
-    private fun startInterval(cmd: ByteArray){
-        pollDisposable = Observable.interval(
-            BlastDelegate.getDelegate().getReceiveOutTime(),
-            TimeUnit.MILLISECONDS
-        ).subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                if(retryCount > 0){
-                    if(retryCount > BlastDelegate.getDelegate().getRetryCount()){
-                        callback?.onError(-10)
-                        cancel()
-                        return@subscribe
-                    }
-                    callback?.onRetryCountChanged(retryCount,"正在重试")
-                }
-                retryCount++
-                BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
-            }
+    private fun startInterval(isInterval:Boolean,cmd: ByteArray){
+        cancel()
+        val message = Message.obtain()
+        message.what = SEND_MSG_WHAT
+        message.obj = cmd
+        if(isInterval) {
+            handler.sendMessageDelayed(message, BlastDelegate.getDelegate().getReceiveOutTime())
+        } else {
+            handler.sendMessage(message)
+        }
     }
 
 
@@ -68,7 +77,7 @@ class CmdExeImpl : CmdExeLoader {
                 if(!isPoll){
                     BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
                 } else {
-                    startInterval(cmd)
+                    startInterval(false,cmd)
                 }
             }
         }
@@ -84,6 +93,6 @@ class CmdExeImpl : CmdExeLoader {
 
     override fun cancel() {
         retryCount = 0
-        pollDisposable?.dispose()
+        handler.removeMessages(SEND_MSG_WHAT)
     }
 }

@@ -17,6 +17,7 @@ import com.hzjq.core.work.Work
 class ReadCapWork : Work<CapEntity> {
 
     private var progress = 0
+
     private var count = 0
 
     private var isContainsNotMatchCap = false//是否包含不匹配的雷管数据
@@ -25,7 +26,9 @@ class ReadCapWork : Work<CapEntity> {
 
     private var caps: MutableList<CapEntity>? = null
 
-    private var resultCaps: MutableList<CapEntity> = arrayListOf()
+    private var missCaps: MutableList<CapEntity> = arrayListOf() //errorCode:-1失败时，漏接数据
+
+   private var meetCaps: MutableList<CapEntity> = arrayListOf() //errorCode:-1失败时，多接数据
 
     constructor(callback: Callback<CapEntity>?) : super(callback)
 
@@ -78,26 +81,25 @@ class ReadCapWork : Work<CapEntity> {
 
 
     private fun checkMaxLimitCap(cap: CapEntity) {
-        if (callbackResult == null) {
-            callback?.onResult(cap)
-        } else {
-            if(isContainsNotMatchCap) {
-                if (TextUtils.equals("0", cap.status.toCharArray()[5].toString())) {
-                    resultCaps.add(cap)
-                } else if (TextUtils.equals("0", cap.status.toCharArray()[6].toString())) {
-                    resultCaps.add(cap)
-                }
+
+        if (isContainsNotMatchCap) {
+            if (TextUtils.equals("0", cap.status.toCharArray()[5].toString())) {
+                meetCaps.add(cap)
+            } else if (TextUtils.equals("0", cap.status.toCharArray()[6].toString())) {
+                missCaps.add(cap)
             }
         }
+
         if (count + 1 >= BlastDelegate.getDelegate().getMaxSupportCapCount()) {
             onProgressChanged(100, "已达到雷管支持最大数")
-            checkNotMatchCap()
+            checkNotMatchCap(cap)
             onDestroy()
         } else if (count + 1 >= cap.total) {
             onProgressChanged(100, "已读取全部雷管信息")
-            checkNotMatchCap()
+            checkNotMatchCap(cap)
             onDestroy()
         } else {
+            callback?.onResult(cap)
             if (callbackResult == null) {
                 progress = (count + 1) * (50 / cap.total)
                 retry(++count)
@@ -108,12 +110,17 @@ class ReadCapWork : Work<CapEntity> {
         }
     }
 
-    private fun checkNotMatchCap() {
+    private fun checkNotMatchCap(cap: CapEntity) {
+        if (callbackResult == null) {
+            cap.isScanEnd = true
+            callback?.onResult(cap)
+        }
         if (callbackResult != null) {
             val resultEntity = CapResultEntity()
             resultEntity.caps = caps
             resultEntity.errorCode = if (isContainsNotMatchCap) 0 else -1
-            resultEntity.resultCaps = resultCaps
+            resultEntity.meetCaps = meetCaps
+            resultEntity.missCaps = missCaps
             callbackResult?.onResult(resultEntity)
         }
     }

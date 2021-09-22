@@ -2,6 +2,7 @@ package com.hzjq.core.serial
 
 import android.os.Message
 import android.text.TextUtils
+import com.hzjq.core.BlastDelegate
 import com.vi.vioserial.BaseSerial
 import com.vi.vioserial.listener.OnNormalDataListener
 import com.vi.vioserial.listener.OnSerialDataListener
@@ -73,6 +74,7 @@ class BlastSerial  {
         mBaseSerial!!.setDataBits(mDataBits)
         mBaseSerial!!.setParity(mParity)
         mBaseSerial!!.setFlowCon(mFlowCon)
+        mBaseSerial!!.setSleepTime(BlastDelegate.getDelegate().getSerialWriteSleepTime(),BlastDelegate.getDelegate().getSerialReadSleepTime())
         val openStatus: Int = mBaseSerial!!.openSerial()
         if (openStatus != 0) {
             close()

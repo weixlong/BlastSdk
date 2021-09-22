@@ -30,12 +30,14 @@ class BlastDelegate {
             .setSendMessageLoader(MessageSender())
             .setParseLoader(Parser())
             .setUpgradeExitLoader(UpgradeExitImpl())
-            .setReceiveOutTime(5)
+            .setReceiveOutTime(2000)
             .setRetryCount(3)
             .setCmdType("B0")
-            .setDelayWriteData(false)
+            .setDelayWriteData(true)
             .setMaxSupportCapCount(600)
             .setBlastOutTime(8000)
+            .setSerialReadSleepTime(8)
+            .setSerialWriteSleepTime(5)
     }
 
     companion object {
@@ -64,6 +66,20 @@ class BlastDelegate {
      */
     fun getUpgradeExitLoader():OnUpgradeExitLoader{
         return option.getOnUpgradeExitLoader()
+    }
+
+    /**
+     * 获取串口写入数据的休眠时间（ms）
+     */
+    fun getSerialWriteSleepTime():Long{
+        return option.getSerialWriteSleepTime()
+    }
+
+    /**
+     * 获取串口读取数据的休眠时间
+     */
+    fun getSerialReadSleepTime():Long{
+        return option.getSerialReadSleepTime()
     }
 
     /**

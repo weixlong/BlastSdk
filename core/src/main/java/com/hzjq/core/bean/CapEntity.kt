@@ -1,5 +1,7 @@
 package com.hzjq.core.bean
 
+import org.json.JSONObject
+
 /**
  * 雷管实体
  */
@@ -15,4 +17,23 @@ open class CapEntity {
     var mVoltage = 0.0//电压值
     var mElectric = 0.0//电流值
     var password = ""//授权密码
+    var isScanEnd = false//扫描是否结束，是否是最后一条
+    override fun toString(): String {
+        val jsonObject = JSONObject()
+        jsonObject.put("uid",uid)
+        jsonObject.put("capNumber",capNumber)
+        jsonObject.put("delay",delay)
+        jsonObject.put("areaNumber",areaNumber)
+        jsonObject.put("holeNumber",holeNumber)
+        jsonObject.put("rowNumber",rowNumber)
+        jsonObject.put("status",status)
+        jsonObject.put("total",total)
+        jsonObject.put("mVoltage",mVoltage)
+        jsonObject.put("mElectric",mElectric)
+        jsonObject.put("password",password)
+        jsonObject.put("isScanEnd",isScanEnd)
+        return jsonObject.toString()
+    }
+
+
 }

@@ -22,7 +22,7 @@ class ChargeImpl : OnChargeLoader {
 
     override fun onCharge(callback: ProgressCallback<ChargeProgressEntity>) {
         val cpe = ChargeProgressEntity()
-        val call = object : Callback<CapEntity> {
+        val call = object : ProgressCallback<CapEntity> {
             override fun onResult(it: CapEntity) {
                 if (!TextUtils.isEmpty(it.status)) {
                     if (TextUtils.equals("0", it.status.toCharArray()[5].toString())
@@ -56,6 +56,10 @@ class ChargeImpl : OnChargeLoader {
 
             override fun onError(errorCode: Int) {
                 callback.onError(errorCode)
+            }
+
+            override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                callback.onProgressChanged(progress, total, action)
             }
 
         }
