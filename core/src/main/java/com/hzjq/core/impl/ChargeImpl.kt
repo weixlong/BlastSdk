@@ -19,11 +19,13 @@ class ChargeImpl : OnChargeLoader {
     val notAuthArray = arrayListOf<CapEntity>()
     val notMatchArray = arrayListOf<CapEntity>()
     val notChargeArray = arrayListOf<CapEntity>()
+    val resultArray = arrayListOf<CapEntity>()
 
     override fun onCharge(callback: ProgressCallback<ChargeProgressEntity>) {
         val cpe = ChargeProgressEntity()
         val call = object : ProgressCallback<CapEntity> {
             override fun onResult(it: CapEntity) {
+                resultArray.add(it)
                 if (!TextUtils.isEmpty(it.status)) {
                     if (TextUtils.equals("0", it.status.toCharArray()[5].toString())
                         || TextUtils.equals("0", it.status.toCharArray()[6].toString())
@@ -41,12 +43,14 @@ class ChargeImpl : OnChargeLoader {
                         cpe.code = -1
                         notAuthArray.add(it)
                     }
-                    if(cpe.isEnd){
-                        cpe.chargeErrCaps = notChargeArray
-                        cpe.notAuthCaps = notAuthArray
-                        cpe.notMatchCaps = notMatchArray
-                        callback.onResult(cpe)
-                    }
+                }
+                if(it.isScanEnd){
+                    cpe.chargeErrCaps = notChargeArray
+                    cpe.notAuthCaps = notAuthArray
+                    cpe.notMatchCaps = notMatchArray
+                    cpe.caps = resultArray
+                    cpe.isEnd = true
+                    callback.onResult(cpe)
                 }
             }
 

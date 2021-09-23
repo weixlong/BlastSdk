@@ -36,6 +36,6 @@ class CheckCapPassWordWork : Work<CapResultEntity> {
     }
 
     override fun cancel() {
-        onDestroy()
+
     }
 }

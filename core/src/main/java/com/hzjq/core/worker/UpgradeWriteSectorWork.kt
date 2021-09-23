@@ -28,7 +28,7 @@ class UpgradeWriteSectorWork : Work<Int> {
             cancel()
             val mSectorDataList = args[0] as ArrayList<String>// 扇区数据
             val mSectorAddrList = args[1] as ArrayList<String>// 扇区地址
-            val position = args[3] as Int
+            val position = args[2] as Int
             writeSectorData(mSectorDataList, mSectorAddrList, position)
         }
     }
@@ -44,7 +44,7 @@ class UpgradeWriteSectorWork : Work<Int> {
             doNext(mSectorDataList, mSectorAddrList,position)
             return
         }
-        onProgressChanged(position*22/85,"写入当前扇区数据(${dataCount}/${8})")
+        onProgressChanged((position*85/22).toInt(),"写入当前扇区数据(${dataCount}/${8})")
         disposable?.dispose()
         disposable = Observable.timer(60, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.newThread())
@@ -57,7 +57,7 @@ class UpgradeWriteSectorWork : Work<Int> {
                     .exeOnceCmd(msg.assembly(), callback)
                 ++dataCount
             }.subscribe(Consumer {
-                if (it < 8) {
+                if (it < 9) {
                     writeSectorData(mSectorDataList, mSectorAddrList, position)
                 }
             })

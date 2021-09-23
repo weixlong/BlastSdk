@@ -10,6 +10,7 @@ class Option {
     private var receiveOutTime = 5L//接收超时ms
     private var isDelayWriteData = true//是否写入延时数据
     private var retryCount = 3//重试次数
+    private var upgradeWriteRetryCount = 3 // 升级写入地址失败次数
     private var maxSupportCapCount = 600 //支持最大雷管数
     private var blastOutTime = 8000L//起爆超市时间
     private var serialWriteSleepTime = 5L//写入时休眠时间
@@ -80,6 +81,15 @@ class Option {
 
     fun getRetryCount():Int{
         return retryCount
+    }
+
+    fun setUpgradeWriteRetryCount(count: Int):Option{
+        this.upgradeWriteRetryCount = count
+        return this
+    }
+
+    fun getUpgradeWriteRetryCount():Int{
+        return upgradeWriteRetryCount
     }
 
     fun setUpgradeExitLoader(onUpgradeExitLoader: OnUpgradeExitLoader): Option {

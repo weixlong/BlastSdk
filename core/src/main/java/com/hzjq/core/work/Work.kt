@@ -63,7 +63,7 @@ abstract class Work<T> : OnCancelLoader {
     /**
      * 执行指定的任务
      */
-    fun <work : Work<Any>> doWork(clazz: Class<work>, vararg args: Any) {
+    fun <work : Work<Any>> todoWork(clazz: Class<work>, vararg args: Any) {
         works?.doTargetWork(clazz, *args)
     }
 

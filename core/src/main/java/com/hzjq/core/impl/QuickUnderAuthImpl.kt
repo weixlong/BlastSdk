@@ -3,7 +3,6 @@ package com.hzjq.core.impl
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.bean.CapResultEntity
-import com.hzjq.core.callback.Callback
 import com.hzjq.core.callback.ProgressCallback
 import com.hzjq.core.loader.OnQuickUnderAuthLoader
 import com.hzjq.core.work.Works
@@ -16,7 +15,7 @@ class QuickUnderAuthImpl : OnQuickUnderAuthLoader {
     private var authWorks: Works? = null
 
     override fun onQuickUnderAuth(caps: MutableList<CapEntity>,callback: ProgressCallback<CapProgressEntity>,underErrorCallback: Consumer<CapResultEntity>) {
-        val capCallback = object :Callback<CapEntity>{
+        val capCallback = object :ProgressCallback<CapEntity>{
             override fun onResult(t: CapEntity) {
 
             }
@@ -27,6 +26,10 @@ class QuickUnderAuthImpl : OnQuickUnderAuthLoader {
 
             override fun onError(errorCode: Int) {
                 callback.onError(errorCode)
+            }
+
+            override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                callback.onProgressChanged(progress, total, action)
             }
         }
 
@@ -81,7 +84,7 @@ class QuickUnderAuthImpl : OnQuickUnderAuthLoader {
 
         underWorks = Works.Builder.newBuilder()
             .addWork(CheckCapPassWordWork(caps, underCall))
-            .addWork(UnderCapWork(true,underCall))
+            .addWork(UnderCapWork(false,underCall))
             .addWork(UnderInnerScanModeWork(caps,capCallback))
             .addWork(UnderScanShipWork(underCall,capCallback))
             .addWork(ReadCapWork(capCallback))

@@ -30,7 +30,7 @@ class BlastReadCapWork : Work<CapResultEntity> {
                     if(msg is CapEntity){
                         caps.add(msg)
                         onProgressChanged((50+(position*1.0/msg.total)*50).toInt(),"正在查询起爆雷管数据")
-                        if(position < msg.total){
+                        if(position < msg.total-1){
                             position ++
                             retry(success)
                         } else {

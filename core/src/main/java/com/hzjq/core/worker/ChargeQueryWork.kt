@@ -31,7 +31,7 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
 
 //                            if(msg.stateCode == 0){
                             if (msg.progress < 100) {
-                                onProgressChanged(msg.progress / 2, "正在查询充电结果")
+                                onProgressChanged(msg.progress / 2, "正在充电")
                                 retry()
                             } else {
                                 doNext(0)//查询雷管数据
@@ -46,7 +46,7 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
                     }
 
                     override fun failed() {
-                        onProgressChanged(100, "查询充电结果失败")
+                        onProgressChanged(100, "充电失败")
                         callback?.onError(-54)
                         onDestroy()
                     }

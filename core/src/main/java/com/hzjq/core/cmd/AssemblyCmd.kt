@@ -78,7 +78,7 @@ class AssemblyCmd : AssemblyCmdLoader {
         return Cmd(
             CmdCode.BLAST_OK_ASK,
             CmdCode.BLAST_E_ASK,
-            CmdCode.BLAST_CMD + "00"
+            CmdCode.BLAST_CMD + "03"
         )
     }
 

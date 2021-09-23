@@ -37,8 +37,8 @@ class UpgradeExitModeWork : Work<Int> {
                 override fun onSuccess(msg: Any) {
                     val success = msg as Boolean
                     if (success) {
-                        onProgressChanged(97, "退出升级模式成功")
-                        callback?.onError(AckCode.EXIT_UPGRADE_MODE_OK)
+                        onProgressChanged(100, "退出升级模式成功")
+                        callback?.onResult(AckCode.EXIT_UPGRADE_MODE_OK)
                     } else {
                         onProgressChanged(100, "退出升级模式失败")
                         callback?.onError(-7)

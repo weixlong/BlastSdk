@@ -46,7 +46,7 @@ class UnderCapWork : Work<CapResultEntity> {
         if (isUnderOnly) {
             onProgressChanged(1 + position * 99 / caps!!.size, "正在下传雷管信息")
         } else {
-            onProgressChanged(1 + position * 29 / caps!!.size, "正在下传雷管信息")
+            onProgressChanged((1 + position * 29f / caps!!.size).toInt(), "正在下传雷管信息")
         }
         if (position < caps!!.size) {
             doUnderCap()
@@ -56,6 +56,7 @@ class UnderCapWork : Work<CapResultEntity> {
                 val t = CapResultEntity()
                 callback?.onResult(t)
             } else {
+                onProgressChanged((1 + position * 29f / caps!!.size).toInt(), "已完成下传雷管信息")
                 doNext(0,caps!!)
             }
         }
@@ -92,7 +93,7 @@ class UnderCapWork : Work<CapResultEntity> {
         if(!caps.isNullOrEmpty()) {
             Receives.getInstance().unRegisterReceiver(
                 BlastDelegate.getDelegate()
-                    .getAssemblyCmdLoader().getUnderCapCmd(position, caps!!)
+                    .getAssemblyCmdLoader().getUnderCapCmd(if(position >= caps!!.size) caps!!.size -1 else position, caps!!)
             )
         }
     }

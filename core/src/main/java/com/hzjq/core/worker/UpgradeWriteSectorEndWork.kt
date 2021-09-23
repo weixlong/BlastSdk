@@ -21,7 +21,7 @@ class UpgradeWriteSectorEndWork : Work<Int> {
         if (args.size >= 3) {
             val mSectorDataList = args[0] as ArrayList<String>// 扇区数据
             val mSectorAddrList = args[1] as ArrayList<String>// 扇区地址
-            var position = args[3] as Int
+            var position = args[2] as Int
             Receives.getInstance()
                 .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader()
                     .getUpgradeWriteSectorCmd(), object : Receiver {
@@ -36,9 +36,9 @@ class UpgradeWriteSectorEndWork : Work<Int> {
                     override fun onSuccess(msg: Any) {
                         val isOk = msg as Boolean
                         if(isOk){
-                            doWork(UpgradeSendAddressWork::class.java,mSectorDataList,mSectorAddrList,++position)
+                            todoWork(UpgradeSendAddressWork::class.java as Class<Work<Any>>,mSectorDataList,mSectorAddrList,++position)
                         } else {
-                            doWork(UpgradeSendAddressWork::class.java,mSectorDataList,mSectorAddrList,position)
+                            todoWork(UpgradeSendAddressWork::class.java as Class<Work<Any>>,mSectorDataList,mSectorAddrList,position)
                         }
                     }
 

@@ -30,14 +30,15 @@ class BlastDelegate {
             .setSendMessageLoader(MessageSender())
             .setParseLoader(Parser())
             .setUpgradeExitLoader(UpgradeExitImpl())
-            .setReceiveOutTime(2000)
-            .setRetryCount(3)
-            .setCmdType("B0")
-            .setDelayWriteData(true)
-            .setMaxSupportCapCount(600)
-            .setBlastOutTime(8000)
-            .setSerialReadSleepTime(8)
-            .setSerialWriteSleepTime(5)
+            .setReceiveOutTime(800)//接收超时时间
+            .setRetryCount(3)//接收超时重试次数
+            .setCmdType("B0")//起爆器类型
+            .setDelayWriteData(true)//开启写入延时方案
+            .setMaxSupportCapCount(600)//支持的最大组网雷管数
+            .setBlastOutTime(8000)//起爆超时
+            .setSerialReadSleepTime(10)//读取串口返回休眠时间
+            .setSerialWriteSleepTime(8)//写入串口数据休眠时间
+            .setUpgradeWriteRetryCount(3)//升级写入地址重试次数
     }
 
     companion object {
@@ -116,6 +117,14 @@ class BlastDelegate {
      */
     fun getRetryCount():Int{
         return option.getRetryCount()
+    }
+
+
+    /**
+     * 升级时写入地址失败次数
+     */
+    fun getUpgradeWriteRetryCount():Int{
+        return option.getUpgradeWriteRetryCount()
     }
 
     /**

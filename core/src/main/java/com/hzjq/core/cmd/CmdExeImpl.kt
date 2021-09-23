@@ -57,7 +57,6 @@ class CmdExeImpl : CmdExeLoader {
      * 开始轮询结果
      */
     private fun startInterval(isInterval:Boolean,cmd: ByteArray){
-        cancel()
         val message = Message.obtain()
         message.what = SEND_MSG_WHAT
         message.obj = cmd
@@ -94,5 +93,6 @@ class CmdExeImpl : CmdExeLoader {
     override fun cancel() {
         retryCount = 0
         handler.removeMessages(SEND_MSG_WHAT)
+        handler.removeCallbacksAndMessages(-1)
     }
 }

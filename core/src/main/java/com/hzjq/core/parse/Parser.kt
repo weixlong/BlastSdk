@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.hzjq.core.BlastDelegate
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapProgressEntity
+import com.hzjq.core.util.CapUtil
 import com.hzjq.core.util.Convert
 import com.sdk.DeviceManager_LXR5000.util.ByteUtil
 import io.reactivex.Observable
@@ -46,7 +47,7 @@ class Parser : ParseLoader {
                 val block = ByteArray(2048)
                 while (dataStream.read(block) != -1) {
                     mSectorDataList.add(ByteUtil.bytesToHexString(block))
-                    mSectorAddrList.add(ByteUtil.getCRC_16(block))
+                    mSectorAddrList.add(CapUtil.getCRC_16(block))
                 }
                 dataStream.close()
                 it.onNext(true)

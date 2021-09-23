@@ -13,7 +13,7 @@ class ChargeWork : Work<ChargeProgressEntity> {
     constructor(callback: Callback<ChargeProgressEntity>?) : super(callback)
 
     override fun doWork(vararg args: Any) {
-        onProgressChanged(0,"正在充电")
+        onProgressChanged(0,"进入充电模式")
         Receives.getInstance()
             .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader().getChargeCmd()
                 , object : Receiver {
@@ -22,12 +22,12 @@ class ChargeWork : Work<ChargeProgressEntity> {
                     }
 
                     override fun onSuccess(msg: Any) {
-                        onProgressChanged(0,"充电成功")
+                        onProgressChanged(0,"进入充电模式成功")
                         doNext()
                     }
 
                     override fun failed() {
-                        onProgressChanged(100,"充电失败")
+                        onProgressChanged(100,"进入充电模式失败")
                         callback?.onError(-53)
                         onDestroy()
                     }

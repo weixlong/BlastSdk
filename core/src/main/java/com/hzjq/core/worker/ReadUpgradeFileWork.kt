@@ -33,7 +33,7 @@ class ReadUpgradeFileWork : Work<Int> {
         mSectorAddrList.clear()
         onProgressChanged(5,"正在解析升级文件")
         BlastDelegate.getDelegate().getParseLoader()
-            .parseUpgradeFileData(binFile,mSectorDataList,mSectorDataList,
+            .parseUpgradeFileData(binFile,mSectorDataList,mSectorAddrList,
                 Consumer<Boolean> {
                     if(it) {
                         onProgressChanged(10,"文件解析成功")

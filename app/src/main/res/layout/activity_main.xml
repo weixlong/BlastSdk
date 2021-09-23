@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,26 +47,20 @@
                     android:layout_marginRight="10dp"
                     android:text="获取起爆器版本，返回当前起爆器版本号" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="getVersion"
+                    android:text="获取起爆器版本" />
 
-                    <Button
-                        android:onClick="getVersion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="获取起爆器版本" />
+                <TextView
+                    android:id="@+id/versionView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp" />
 
-                    <TextView
-                        android:id="@+id/versionView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,26 +78,19 @@
                     android:layout_marginRight="10dp"
                     android:text="升级起爆器必须传入起爆器升级文件及文件对应的版本号，该文件必须已.bin结尾，并且不能为空。如文件存放在sdcard里，请开发者确保已有文件操作权限。一般升级文件由本公司提供。返回升级后的版本号。" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="upgradeVersion"
+                    android:text="版本升级" />
 
-                    <Button
-                        android:onClick="upgradeVersion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="版本升级" />
-
-                    <TextView
-                        android:id="@+id/upgradeVersionView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/upgradeVersionView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp" />
 
 
                 <TextView
@@ -123,26 +109,19 @@
                     android:layout_marginRight="10dp"
                     android:text="升级起爆器后，必须退出升级，才能继续通讯。调用版本升级正常返回成功可不需要退出升级模式，意外中断（可能造成起爆器损坏）请开发者按公司需求处理。" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="exitUpgradeMode"
+                    android:text="退出升级模式" />
 
-                    <Button
-                        android:onClick="exitUpgradeMode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="退出升级模式" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/exitUpgradeProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp" />
 
 
                 <TextView
@@ -161,26 +140,20 @@
                     android:layout_marginRight="10dp"
                     android:text="扫描雷管数据前，请先确保已连接了雷管。扫描成功返回雷管数据" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="onScanCapClick"
+                    android:text="扫描雷管数据" />
 
-                    <Button
-                        android:onClick="onScanCapClick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="扫描雷管数据" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/scanCapProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
 
                 <TextView
@@ -199,26 +172,20 @@
                     android:layout_marginRight="10dp"
                     android:text="下传雷管数据即是将这些雷管写入起爆器。在下传之前，请先确保已对雷管设置了密码（password属性），一般密码来源于民爆系统，请研发者自行保证密码的正确性。下传返回成功和失败两种结果数据，具体查看CapResultEntity中的注释。" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="onUnderCapClick"
+                    android:text="下传雷管数据" />
 
-                    <Button
-                        android:onClick="onUnderCapClick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="下传雷管数据" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/underCapProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
 
                 <TextView
@@ -237,25 +204,20 @@
                     android:layout_marginRight="10dp"
                     android:text="雷管授权是指对已经下传的雷管数据进行起爆认证。在操作前请先确保已下传成功。返回授权过程结果，具体查看CapProgressEntity。" />
 
-                <LinearLayout
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="onAuthCapClick"
+                    android:text="雷管授权" />
 
-                    <Button
-                        android:onClick="onAuthCapClick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="雷管授权" />
+                <TextView
+                    android:id="@+id/authCapProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -273,25 +235,20 @@
                     android:layout_marginRight="10dp"
                     android:text="雷管充电是指对雷管充入高压，高压充入成功后处于高危状态，如无其他后续操（起爆）作请务必关闭高压状态。返回充电结果ChargeProgressEntity。" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="onChargeCapClick"
+                    android:text="雷管充电" />
 
-                    <Button
-                        android:onClick="onChargeCapClick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="雷管充电" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/chargeCapProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
 
                 <TextView
@@ -310,27 +267,20 @@
                     android:layout_marginRight="10dp"
                     android:text="雷管起爆，起爆后返回起爆后的雷管信息。请查看CapResultEntity  errorCode = 0 时 caps存放起爆成功数据   errorCode = -2时resultCaps存放错误数据。起爆完成后请开发者自行上传到民爆服务器进行备案。" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="onBlastCapClick"
+                    android:text="雷管起爆" />
 
-                    <Button
-                        android:onClick="onBlastCapClick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="雷管起爆" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
-
-
+                <TextView
+                    android:id="@+id/blastCapProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
 
                 <TextView
@@ -349,25 +299,20 @@
                     android:layout_marginRight="10dp"
                     android:text="一键下传授权，是下传和授权两个步骤的合并执行。返回授权结果和下传错误。" />
 
-                <LinearLayout
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:onClick="onQuickUnderAuthClick"
+                    android:text="一键下传授权" />
 
-                    <Button
-                        android:onClick="onQuickUnderAuthClick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="一键下传授权" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/quickCapProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
 
                 <TextView
@@ -399,8 +344,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_weight="1"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView

@@ -70,7 +70,8 @@ class Receives private constructor() {
                 })
                 return true
             }
-        } else if(!cmd.keyError.isNullOrEmpty()){
+        }
+        if(!cmd.keyError.isNullOrEmpty()){
             if (msg.startsWith(cmd.keyError)) {
                 BlastDelegate.getDelegate().post(Runnable {
                     receiver.failed()

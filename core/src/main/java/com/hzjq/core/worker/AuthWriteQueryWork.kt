@@ -18,7 +18,7 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
     override fun doWork(vararg args: Any) {
         if (args.isNotEmpty()) {
             progress = args[0] as Int
-            onProgressChanged(progress, "正在进行授权查询")
+            onProgressChanged(progress+51, "正在进行授权查询")
             Receives.getInstance()
                 .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader()
                     .getWriteDelayCycleQueryCmd(),
@@ -33,12 +33,12 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
 //                                if (msg.stateCode == 0) {
                                     if (msg.progress < 100) {
                                         callback?.onResult(msg)
-                                        progress = 51 + msg.progress * 49 / 100
+                                        progress = (msg.progress * 49f / 100).toInt()
                                         retry(progress)
                                     } else {
                                         msg.isEnd = true
-                                        callback?.onResult(msg)
                                         onProgressChanged(100, "授权查询完成")
+                                        callback?.onResult(msg)
                                     }
 //                                } else {
 //                                    onProgressChanged(100, "授权查询失败")

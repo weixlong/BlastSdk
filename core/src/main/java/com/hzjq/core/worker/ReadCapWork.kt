@@ -41,7 +41,7 @@ class ReadCapWork : Work<CapEntity> {
                 isContainsNotMatchCap = args[3] as Boolean
             }
             if (callbackResult == null) {
-                onProgressChanged(50 + progress, "正在读取雷管信息")
+                onProgressChanged(50 + progress, "正在读取雷管充电信息")
             } else {
                 onProgressChanged(40 + progress, "正在读取雷管信息")
             }
@@ -61,7 +61,9 @@ class ReadCapWork : Work<CapEntity> {
                             if (msg is CapEntity) {
                                 checkMaxLimitCap(msg)
                             } else {
-                                failed()
+                                onProgressChanged(100, "读取雷管信息失败")
+                                callback?.onError(-62)
+                                onDestroy()
                             }
                         }
 
@@ -101,10 +103,10 @@ class ReadCapWork : Work<CapEntity> {
         } else {
             callback?.onResult(cap)
             if (callbackResult == null) {
-                progress = (count + 1) * (50 / cap.total)
+                progress = ((count + 1) * (50f / cap.total)).toInt()
                 retry(++count)
             } else {
-                progress = (count + 1) * (10 / cap.total)
+                progress = ((count + 1) * (10f / cap.total)).toInt()
                 retry(++count, callbackResult!!, caps!!, isContainsNotMatchCap)
             }
         }
