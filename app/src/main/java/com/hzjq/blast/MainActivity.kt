@@ -1,5 +1,6 @@
 package com.hzjq.blast
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -30,8 +31,12 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun addLog(log: LogBean) {
+        if(mLogAdapter.count > 499){
+            mLogAdapter.remove(mLogAdapter.getItem(0))
+        }
         mLogAdapter.add(log)
     }
+
 
     fun getVersion(view: View) {
         Blast.getInstance().getVersion(object : OnVersionCallback {
@@ -92,10 +97,12 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
+    @SuppressLint("SetTextI18n")
     fun onScanCapClick(view: View) {
+        caps.clear()
         Blast.getInstance().scanCap().onScanCap(object : OnScanCapCallback {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                BlastLog.e("progress:${progress}  action:${action}")
                 scanCapProgressView.text = "progress:${progress}  action:${action}"
             }
 
@@ -107,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onRetryCountChanged(retryCount: Int, action: String) {
+                BlastLog.e("retryCount:${retryCount}  action:${action}")
                 scanCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
@@ -122,6 +130,7 @@ class MainActivity : AppCompatActivity() {
         CapUtils.setTestPassword(caps)
         Blast.getInstance().underCap().onUnderCap(caps, object : ProgressCallback<CapResultEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                BlastLog.e("progress:${progress}  action:${action}")
                 underCapProgressView.text = "progress:${progress}  action:${action}"
             }
 
@@ -135,6 +144,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onRetryCountChanged(retryCount: Int, action: String) {
+                BlastLog.e("retryCount:${retryCount}  action:${action}")
                 underCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
@@ -149,6 +159,7 @@ class MainActivity : AppCompatActivity() {
     fun onAuthCapClick(view: View) {
         Blast.getInstance().authCap().onAuthCap(object : ProgressCallback<CapProgressEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                BlastLog.e("progress:${progress}  action:${action}")
                 authCapProgressView.text = "progress:${progress}  action:${action}"
             }
 
@@ -159,6 +170,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onRetryCountChanged(retryCount: Int, action: String) {
+                BlastLog.e("retryCount:${retryCount}  action:${action}")
                 authCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
@@ -173,6 +185,7 @@ class MainActivity : AppCompatActivity() {
     fun onChargeCapClick(view: View) {
         Blast.getInstance().charge().onCharge(object : ProgressCallback<ChargeProgressEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                BlastLog.e("progress:${progress}  action:${action}")
                 chargeCapProgressView.text = "progress:${progress}  action:${action}"
             }
 
@@ -188,6 +201,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onRetryCountChanged(retryCount: Int, action: String) {
+                BlastLog.e("retryCount:${retryCount}  action:${action}")
                 chargeCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
@@ -202,6 +216,7 @@ class MainActivity : AppCompatActivity() {
     fun onBlastCapClick(view: View) {
         Blast.getInstance().blast().onBlast(object : ProgressCallback<CapResultEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
+                BlastLog.e("progress:${progress}  action:${action}")
                 blastCapProgressView.text = "progress:${progress}  action:${action}"
             }
 
@@ -214,6 +229,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onRetryCountChanged(retryCount: Int, action: String) {
+                BlastLog.e("retryCount:${retryCount}  action:${action}")
                 blastCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 

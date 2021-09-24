@@ -87,8 +87,10 @@ class MessageSender : OnSendMessageLoader {
 
             override fun onReceiveFullData(hexData: String?) {
                 if (!hexData.isNullOrEmpty()) {
-                    val log = LogBean(hexData,2)
-                    EventBus.getDefault().post(log)
+                    if (BlastDelegate.getDelegate().isDebug()) {
+                        val log = LogBean(hexData, 2)
+                        EventBus.getDefault().post(log)
+                    }
                     Receives.getInstance().findReceiverDoWork(hexData)
                 }
             }

@@ -41,7 +41,7 @@ class ReadCapWork : Work<CapEntity> {
                 isContainsNotMatchCap = args[3] as Boolean
             }
             if (callbackResult == null) {
-                onProgressChanged(50 + progress, "正在读取雷管充电信息")
+                onProgressChanged(50 + progress, "正在读取雷管信息")
             } else {
                 onProgressChanged(40 + progress, "正在读取雷管信息")
             }

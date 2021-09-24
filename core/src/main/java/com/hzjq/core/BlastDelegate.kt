@@ -30,15 +30,16 @@ class BlastDelegate {
             .setSendMessageLoader(MessageSender())
             .setParseLoader(Parser())
             .setUpgradeExitLoader(UpgradeExitImpl())
-            .setReceiveOutTime(800)//接收超时时间
-            .setRetryCount(3)//接收超时重试次数
+            .setOutTimeRetryCount(3)//接收超时重试次数
+            .setFailedRetryCount(3)//接收失败重试次数
             .setCmdType("B0")//起爆器类型
             .setDelayWriteData(true)//开启写入延时方案
             .setMaxSupportCapCount(600)//支持的最大组网雷管数
             .setBlastOutTime(8000)//起爆超时
-            .setSerialReadSleepTime(10)//读取串口返回休眠时间
-            .setSerialWriteSleepTime(8)//写入串口数据休眠时间
-            .setUpgradeWriteRetryCount(3)//升级写入地址重试次数
+            .setReceiveOutTime(2000)//接收超时时间,接收超时时间不得小于读取串口时间+写入休眠时间
+            .setSerialReadSleepTime(3)//读取串口返回休眠时间,接收超时时间不得小于读取串口时间+写入休眠时间
+            .setSerialWriteSleepTime(3)//写入串口数据休眠时间,接收超时时间不得小于读取串口时间+写入休眠时间
+            .setUpgradeWriteRetryCount(3)//升级写入地址失败重试次数
     }
 
     companion object {
@@ -113,10 +114,17 @@ class BlastDelegate {
 
 
     /**
-     * 获取失败重试次数
+     * 获取超时重试次数
      */
-    fun getRetryCount():Int{
-        return option.getRetryCount()
+    fun getOutTimeRetryCount():Int{
+        return option.getOutTimeRetryCount()
+    }
+
+    /**
+     * 获取超时重试次数
+     */
+    fun getFailedRetryCount():Int{
+        return option.getFailedRetryCount()
     }
 
 

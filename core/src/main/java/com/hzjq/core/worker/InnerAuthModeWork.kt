@@ -22,12 +22,12 @@ class InnerAuthModeWork : Work<CapProgressEntity> {
                     }
 
                     override fun onSuccess(msg: Any) {
-                        onProgressChanged(1, "正在进入授权成功")
+                        onProgressChanged(1, "进入授权成功")
                         doNext(1)
                     }
 
                     override fun failed() {
-                        onProgressChanged(100, "正在进入授权模式失败")
+                        onProgressChanged(100, "进入授权模式失败")
                         onDestroy()
                     }
 

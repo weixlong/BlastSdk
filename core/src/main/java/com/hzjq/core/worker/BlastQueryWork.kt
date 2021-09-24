@@ -21,7 +21,7 @@ class BlastQueryWork : Work<CapResultEntity> {
             blastTime = args[1] as Long
             if(isSuccess) {
                 Receives.getInstance()
-                    .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader().getCycleQueryCmd(),
+                    .registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader().getBlastCycleQueryCmd(),
                         object : Receiver {
                             override fun convert(msg: String): Any {
                                 return BlastDelegate.getDelegate().getParseLoader()
@@ -59,7 +59,7 @@ class BlastQueryWork : Work<CapResultEntity> {
                         })
 
                 val msg = DataMessageBean(BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                    .getCycleQueryCmd().cmd)
+                    .getBlastCycleQueryCmd().cmd)
                 BlastDelegate.getDelegate().getCmdExeLoader().exePollResultCmd(msg.assembly(),callback)
             } else {
                 doNext(false)
@@ -70,6 +70,6 @@ class BlastQueryWork : Work<CapResultEntity> {
     override fun cancel() {
         Receives.getInstance()
             .unRegisterReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader()
-                .getCycleQueryCmd())
+                .getBlastCycleQueryCmd())
     }
 }

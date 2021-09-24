@@ -12,7 +12,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         return Cmd(
             CmdCode.KZB_QUERY_LG_INFO_OK_ASK,
             "",
-            CmdCode.KZB_QUERY_LG_INFO_CMD
+            CmdCode.KZB_QUERY_LG_INFO_CMD,
+            30
         )
     }
 
@@ -37,7 +38,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         return Cmd(
             CmdCode.KZB_READ_LG_INFO_ASK,
             "",
-            CmdCode.KZB_READ_LG_INFO_CMD+number
+            CmdCode.KZB_READ_LG_INFO_CMD+number,
+            54
         )
     }
 
@@ -102,7 +104,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         val cmd = Cmd(
             "",
             "",
-            CmdCode.GET_CONTROL_VERSION
+            CmdCode.GET_CONTROL_VERSION,
+            16
         )
         cmd.key = Cmd.Key("23", "BB", 10, 12)
         return cmd
@@ -113,7 +116,8 @@ class AssemblyCmd : AssemblyCmdLoader {
             CmdCode.INTO_UPGRADE_ASK,
             CmdCode.INTO_UPGRADE_E_ASK,
             CmdCode.INTO_UPGRADE_LEFT + BlastDelegate.getDelegate()
-                .getCmdType() + CmdCode.INTO_UPGRADE_RIGHT
+                .getCmdType() + CmdCode.INTO_UPGRADE_RIGHT,
+            12
         )
     }
 
@@ -125,7 +129,8 @@ class AssemblyCmd : AssemblyCmdLoader {
             CmdCode.SEND_UPGRADE_ADDRESS_LEFT
                     + BlastDelegate.getDelegate()
                 .getCmdType() + CmdCode.SEND_UPGRADE_ADDRESS_MIDDLE + number +
-                    CmdCode.SEND_UPGRADE_ADDRESS_RIGHT + address
+                    CmdCode.SEND_UPGRADE_ADDRESS_RIGHT + address,
+            14
         )
     }
 
@@ -134,7 +139,8 @@ class AssemblyCmd : AssemblyCmdLoader {
             CmdCode.SEND_INPUT_ASK,
             "",
             CmdCode.SEND_INPUT_LEFT + BlastDelegate.getDelegate()
-                .getCmdType() + CmdCode.SEND_INPUT_RIGHT
+                .getCmdType() + CmdCode.SEND_INPUT_RIGHT,
+            14
         )
     }
 
@@ -143,7 +149,8 @@ class AssemblyCmd : AssemblyCmdLoader {
             CmdCode.OUT_UPGRADE_ASK,
             CmdCode.OUT_UPGRADE_E_ASK,
             CmdCode.OUT_UPGRADE_LEFT + BlastDelegate.getDelegate()
-                .getCmdType() + CmdCode.OUT_UPGRADE_RIGHT+Convert.getCurrentDetonatorNum(targetVersion).toString()
+                .getCmdType() + CmdCode.OUT_UPGRADE_RIGHT+Convert.getCurrentDetonatorNum(targetVersion).toString(),
+            12
         )
     }
 
@@ -151,7 +158,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         val cmd = Cmd(
             "",
             "",
-            CmdCode.KZB_QUERY_LG_INFO_CMD
+            CmdCode.KZB_QUERY_LG_INFO_CMD,
+            30
         )
         cmd.key = Cmd.Key(
             CmdCode.KZB_QUERY_LG_INFO_OK_ASK,
@@ -166,7 +174,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         val cmd = Cmd(
             "",
             "",
-            CmdCode.KZB_QUERY_LG_INFO_CMD
+            CmdCode.KZB_QUERY_LG_INFO_CMD,
+            30
         )
         cmd.key = Cmd.Key(
             CmdCode.KZB_QUERY_LG_INFO_OK_ASK,
@@ -181,7 +190,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         val cmd = Cmd(
             "",
             "",
-            CmdCode.KZB_QUERY_LG_INFO_CMD
+            CmdCode.KZB_QUERY_LG_INFO_CMD,
+            30
         )
         cmd.key = Cmd.Key(
             CmdCode.KZB_QUERY_LG_INFO_OK_ASK,
@@ -196,7 +206,8 @@ class AssemblyCmd : AssemblyCmdLoader {
         val cmd = Cmd(
             "",
             "",
-            CmdCode.KZB_QUERY_LG_INFO_CMD
+            CmdCode.KZB_QUERY_LG_INFO_CMD,
+            30
         )
         cmd.key = Cmd.Key(
             CmdCode.KZB_QUERY_LG_INFO_OK_ASK,

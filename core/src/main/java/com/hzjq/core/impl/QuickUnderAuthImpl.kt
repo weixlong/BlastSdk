@@ -84,7 +84,7 @@ class QuickUnderAuthImpl : OnQuickUnderAuthLoader {
 
         underWorks = Works.Builder.newBuilder()
             .addWork(CheckCapPassWordWork(caps, underCall))
-            .addWork(UnderCapWork(false,underCall))
+            .addWork(UnderCapWork(underCall))
             .addWork(UnderInnerScanModeWork(caps,capCallback))
             .addWork(UnderScanShipWork(underCall,capCallback))
             .addWork(ReadCapWork(capCallback))

@@ -9,7 +9,8 @@ class Option {
     private var debug = false
     private var receiveOutTime = 5L//接收超时ms
     private var isDelayWriteData = true//是否写入延时数据
-    private var retryCount = 3//重试次数
+    private var outTimeRetryCount = 3//超时重试次数
+    private var failedRetryCount = 3//失败重试次数
     private var upgradeWriteRetryCount = 3 // 升级写入地址失败次数
     private var maxSupportCapCount = 600 //支持最大雷管数
     private var blastOutTime = 8000L//起爆超市时间
@@ -39,7 +40,10 @@ class Option {
     }
 
     fun setSerialWriteSleepTime(time: Long):Option{
-        this.serialWriteSleepTime = time
+        if(time < 0)return this
+        if(time + serialReadSleepTime < receiveOutTime){
+            this.serialWriteSleepTime = time
+        }
         return this
     }
 
@@ -48,7 +52,10 @@ class Option {
     }
 
     fun setSerialReadSleepTime(time: Long):Option{
-        this.serialReadSleepTime = time
+        if(time < 0)return this
+        if(time + serialWriteSleepTime < receiveOutTime){
+            this.serialReadSleepTime = time
+        }
         return this
     }
 
@@ -57,6 +64,7 @@ class Option {
     }
 
     fun setBlastOutTime(time: Long):Option{
+        if(time < 0)return this
         this.blastOutTime = time
         return this
     }
@@ -66,6 +74,7 @@ class Option {
     }
 
     fun setMaxSupportCapCount(maxSupportCapCount:Int):Option{
+        if(maxSupportCapCount < 0)return this
         this.maxSupportCapCount = maxSupportCapCount
         return this
     }
@@ -74,16 +83,28 @@ class Option {
         return maxSupportCapCount
     }
 
-    fun setRetryCount(count:Int):Option{
-        this.retryCount = count
+    fun setOutTimeRetryCount(count:Int):Option{
+        if(count < 0)return this
+        this.outTimeRetryCount = count
         return this
     }
 
-    fun getRetryCount():Int{
-        return retryCount
+    fun getOutTimeRetryCount():Int{
+        return outTimeRetryCount
+    }
+
+    fun setFailedRetryCount(count:Int):Option{
+        if(count < 0)return this
+        this.failedRetryCount = count
+        return this
+    }
+
+    fun getFailedRetryCount():Int{
+        return failedRetryCount
     }
 
     fun setUpgradeWriteRetryCount(count: Int):Option{
+        if(count < 0)return this
         this.upgradeWriteRetryCount = count
         return this
     }
@@ -130,7 +151,10 @@ class Option {
     }
 
     fun setReceiveOutTime(time: Long): Option {
-        receiveOutTime = time
+        if(time < 0)return this
+        if(time >= serialReadSleepTime + serialWriteSleepTime){
+            receiveOutTime = time
+        }
         return this
     }
 
