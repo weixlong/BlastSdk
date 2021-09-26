@@ -13,8 +13,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import pub.devrel.easypermissions.EasyPermissions
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
     private lateinit var mLogAdapter: LogAdapter
     private val caps = arrayListOf<CapEntity>()
@@ -29,6 +30,14 @@ class MainActivity : AppCompatActivity() {
         EventBus.getDefault().register(this)
     }
 
+    private fun reqPermissions(){
+        EasyPermissions.requestPermissions(this,"打开串口，需要文件操作权限",111,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private fun hasPermission():Boolean{
+        return EasyPermissions.hasPermissions(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun addLog(log: LogBean) {
         if(mLogAdapter.count > 499){
@@ -39,6 +48,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun getVersion(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         Blast.getInstance().getVersion(object : OnVersionCallback {
             override fun onResult(t: Int) {
                 versionView.text = "版本号:${t}"
@@ -56,6 +69,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun upgradeVersion(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         CapUtils.readAssetsBinFile(this, Consumer {
             Blast.getInstance().upgrade(35, it, object : OnVersionUpgradeCallback {
                 override fun onProgressChanged(progress: Int, total: Int, action: String) {
@@ -81,6 +98,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun exitUpgradeMode(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         Blast.getInstance().exitUpgradeMode(35, object : Callback<Boolean> {
             override fun onResult(t: Boolean) {
                 exitUpgradeProgressView.text = if (t) "退出成功" else "退出失败"
@@ -99,6 +120,10 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     fun onScanCapClick(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         caps.clear()
         Blast.getInstance().scanCap().onScanCap(object : OnScanCapCallback {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
@@ -127,6 +152,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onUnderCapClick(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         CapUtils.setTestPassword(caps)
         Blast.getInstance().underCap().onUnderCap(caps, object : ProgressCallback<CapResultEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
@@ -157,6 +186,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onAuthCapClick(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         Blast.getInstance().authCap().onAuthCap(object : ProgressCallback<CapProgressEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
                 BlastLog.e("progress:${progress}  action:${action}")
@@ -183,6 +216,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onChargeCapClick(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         Blast.getInstance().charge().onCharge(object : ProgressCallback<ChargeProgressEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
                 BlastLog.e("progress:${progress}  action:${action}")
@@ -214,6 +251,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onBlastCapClick(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         Blast.getInstance().blast().onBlast(object : ProgressCallback<CapResultEntity> {
             override fun onProgressChanged(progress: Int, total: Int, action: String) {
                 BlastLog.e("progress:${progress}  action:${action}")
@@ -243,6 +284,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onQuickUnderAuthClick(view: View) {
+        if(!hasPermission()) {
+            reqPermissions()
+            return
+        }
         CapUtils.setTestPassword(caps)
         Blast.getInstance().quickUnderAuth()
             .onQuickUnderAuth(caps, object : ProgressCallback<CapProgressEntity> {
@@ -274,5 +319,13 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+
     }
 }
