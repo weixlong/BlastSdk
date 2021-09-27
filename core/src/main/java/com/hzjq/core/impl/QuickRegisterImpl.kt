@@ -4,17 +4,17 @@ import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.ProgressCallback
-import com.hzjq.core.loader.OnQuickUnderAuthLoader
+import com.hzjq.core.loader.OnQuickRegisterLoader
 import com.hzjq.core.work.Works
 import com.hzjq.core.worker.*
 import io.reactivex.functions.Consumer
 
-class QuickUnderAuthImpl : OnQuickUnderAuthLoader {
+class QuickRegisterImpl : OnQuickRegisterLoader {
 
     private var underWorks: Works? = null
     private var authWorks: Works? = null
 
-    override fun onQuickUnderAuth(caps: MutableList<CapEntity>,callback: ProgressCallback<CapProgressEntity>,underErrorCallback: Consumer<CapResultEntity>) {
+    override fun onQuickRegister(caps: MutableList<CapEntity>,callback: ProgressCallback<CapProgressEntity>,underErrorCallback: Consumer<CapResultEntity>) {
         val capCallback = object :ProgressCallback<CapEntity>{
             override fun onResult(t: CapEntity) {
 

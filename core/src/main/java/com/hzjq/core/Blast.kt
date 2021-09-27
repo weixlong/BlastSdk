@@ -107,7 +107,7 @@ class Blast {
     /**
      * 一键下传并授权
      */
-    fun quickUnderAuth():OnQuickUnderAuthLoader{
-       return BlastDelegate.getDelegate().getQuickUnderAuthLoader()
+    fun quickRegister():OnQuickRegisterLoader{
+       return BlastDelegate.getDelegate().getQuickRegisterLoader()
     }
 }

@@ -289,8 +289,8 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
             return
         }
         CapUtils.setTestPassword(caps)
-        Blast.getInstance().quickUnderAuth()
-            .onQuickUnderAuth(caps, object : ProgressCallback<CapProgressEntity> {
+        Blast.getInstance().quickRegister()
+            .onQuickRegister(caps, object : ProgressCallback<CapProgressEntity> {
                 override fun onProgressChanged(progress: Int, total: Int, action: String) {
                     BlastLog.e("progress:${progress}  action:${action}")
                     quickCapProgressView.text = "progress:${progress}  action:${action}"

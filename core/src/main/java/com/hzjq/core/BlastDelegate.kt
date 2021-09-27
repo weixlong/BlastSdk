@@ -20,7 +20,7 @@ class BlastDelegate {
         option.setAuthCapLoader(AuthCapImpl())
             .setBlastLoader(BlastImpl())
             .setChargeLoader(ChargeImpl())
-            .setQuickUnderAuthLoader(QuickUnderAuthImpl())
+            .setQuickRegisterLoader(QuickRegisterImpl())
             .setScanCapLoader(ScanCapImpl())
             .setUnderCapLoader(UnderCapImpl())
             .setVersionLoader(VersionImpl())
@@ -205,8 +205,8 @@ class BlastDelegate {
     /**
      * 获取一键起爆器
      */
-    fun getQuickUnderAuthLoader(): OnQuickUnderAuthLoader {
-        return option.getQuickUnderAuthLoader()
+    fun getQuickRegisterLoader(): OnQuickRegisterLoader {
+        return option.getQuickRegisterLoader()
     }
 
     /**

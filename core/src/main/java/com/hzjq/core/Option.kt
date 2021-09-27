@@ -19,7 +19,7 @@ class Option {
     private lateinit var authCapLoader: OnAuthCapLoader
     private lateinit var blastLoader: OnBlastLoader
     private lateinit var chargeLoader: OnChargeLoader
-    private lateinit var quickUnderAuthLoader: OnQuickUnderAuthLoader
+    private lateinit var quickRegisterLoader: OnQuickRegisterLoader
     private lateinit var scanCapLoader: OnScanCapLoader
     private lateinit var underCapLoader: OnUnderCapLoader
     private lateinit var versionLoader: OnVersionLoader
@@ -194,14 +194,14 @@ class Option {
     }
 
 
-    fun setQuickUnderAuthLoader(quickUnderAuthLoader: OnQuickUnderAuthLoader): Option {
-        this.quickUnderAuthLoader = quickUnderAuthLoader
+    fun setQuickRegisterLoader(quickRegisterLoader: OnQuickRegisterLoader): Option {
+        this.quickRegisterLoader = quickRegisterLoader
         return this
     }
 
 
-    fun getQuickUnderAuthLoader(): OnQuickUnderAuthLoader {
-        return quickUnderAuthLoader
+    fun getQuickRegisterLoader(): OnQuickRegisterLoader {
+        return quickRegisterLoader
     }
 
 
