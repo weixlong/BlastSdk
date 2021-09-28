@@ -31,6 +31,7 @@ class Option {
     private lateinit var onUpgradeExitLoader: OnUpgradeExitLoader
 
 
+
     fun setDebug(debug: Boolean) {
         this.debug = debug
     }

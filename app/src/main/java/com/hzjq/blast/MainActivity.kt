@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
     private lateinit var mLogAdapter: LogAdapter
     private val caps = arrayListOf<CapEntity>()
+    private val SCAN_ACTION: String = ScanManager.ACTION_DECODE //default action
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
