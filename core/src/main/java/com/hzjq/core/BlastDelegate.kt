@@ -30,6 +30,7 @@ class BlastDelegate {
             .setSendMessageLoader(MessageSender())
             .setParseLoader(Parser())
             .setUpgradeExitLoader(UpgradeExitImpl())
+            .setScannerLoader(ScannerImpl())
             .setOutTimeRetryCount(3)//接收超时重试次数
             .setFailedRetryCount(3)//接收失败重试次数
             .setCmdType("B0")//起爆器类型
@@ -61,6 +62,13 @@ class BlastDelegate {
      */
     fun isDebug():Boolean{
         return option.isDebug()
+    }
+
+    /**
+     * 获取扫描器
+     */
+    fun getScannerLoader():ScannerLoader{
+        return option.getScannerLoader()
     }
 
     /**

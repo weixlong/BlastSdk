@@ -1,8 +1,7 @@
 package com.hzjq.core.loader
 
 import android.content.Context
-import com.hzjq.core.bean.CapEntity
-import io.reactivex.functions.Consumer
+import com.hzjq.core.callback.OnScannerCapCallback
 
 interface ScannerLoader {
 
@@ -12,10 +11,15 @@ interface ScannerLoader {
      */
     fun openScanner(context: Context)
 
+
+    fun startDecode()
+
+    fun stopDecode()
+
     /**
      * 设置扫描雷管回调
      */
-    fun setScannerResultCallback(callback:Consumer<CapEntity>)
+    fun setScannerResultCallback(callback: OnScannerCapCallback)
 
     /**
      * 关闭扫描功能

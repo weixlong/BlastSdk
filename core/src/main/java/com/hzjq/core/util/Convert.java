@@ -458,4 +458,9 @@ public class Convert {
         }
         return binStr;
     }
+
+    public static boolean isHexStr(String str){
+        String regex="^[A-Fa-f0-9]+$";
+        return str.matches(regex);
+    }
 }

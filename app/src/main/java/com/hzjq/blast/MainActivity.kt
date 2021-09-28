@@ -1,9 +1,11 @@
 package com.hzjq.blast
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.hzjq.core.Blast
 import com.hzjq.core.bean.*
 import com.hzjq.core.callback.*
@@ -15,11 +17,11 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import pub.devrel.easypermissions.EasyPermissions
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
     private lateinit var mLogAdapter: LogAdapter
     private val caps = arrayListOf<CapEntity>()
-    private val SCAN_ACTION: String = ScanManager.ACTION_DECODE //default action
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +32,21 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
         logView.adapter = mLogAdapter
         logView.dividerHeight = 0
         EventBus.getDefault().register(this)
+
+        Blast.getInstance().getScannerLoader()
+            .openScanner(this)
+
+        Blast.getInstance().getScannerLoader()
+            .setScannerResultCallback(object : OnScannerCapCallback{
+                override fun onScannerCapResult(cap: CapEntity) {
+                    BlastLog.e("onScannerCapResult:${cap}")
+                }
+
+                override fun onScannerCapFailed(result: String) {
+                    BlastLog.e("onScannerCapFailed:${result}")
+                }
+
+            })
     }
 
     private fun reqPermissions(){
@@ -37,7 +54,10 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
     }
 
     private fun hasPermission():Boolean{
-        return EasyPermissions.hasPermissions(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        return ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) !== PackageManager.PERMISSION_GRANTED
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -49,11 +69,16 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
     }
 
 
+    fun onScannerCap(view: View) {
+        Blast.getInstance().getScannerLoader().startDecode()
+    }
+
     fun getVersion(view: View) {
         if(!hasPermission()) {
             reqPermissions()
             return
         }
+
         Blast.getInstance().getVersion(object : OnVersionCallback {
             override fun onResult(t: Int) {
                 versionView.text = "版本号:${t}"
@@ -330,4 +355,6 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
 
     }
+
+
 }

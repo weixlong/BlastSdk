@@ -51,7 +51,6 @@ class BlastSerial  {
         mFlowCon: Int
     ): Int {
         require(!(TextUtils.isEmpty(portStr) || ibaudRate == 0)) { "Serial port and baud rate cannot be empty" }
-
         mBaseSerial = object : BaseSerial(portStr, ibaudRate) {
             override fun onDataBack(data: String) {
                 //温度

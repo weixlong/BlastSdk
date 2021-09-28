@@ -35,6 +35,13 @@ class Blast {
         BlastDelegate.getDelegate().setDebug(debug)
     }
 
+    /**
+     * 获取扫描加载器
+     */
+    fun getScannerLoader():ScannerLoader{
+        return BlastDelegate.getDelegate().getScannerLoader()
+    }
+
 
     /**
      * 获取软件版本

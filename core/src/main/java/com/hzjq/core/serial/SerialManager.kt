@@ -1,6 +1,7 @@
 package com.hzjq.core.serial
 
-import com.sdk.DeviceManager_LXR5000.Detonator
+import com.hzjq.core.BlastDelegate
+import com.hzjq.core.util.OtgUtils
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -48,8 +49,15 @@ class SerialManager {
      */
     fun openPower(onNext: Consumer<Int>): Disposable {
         return Observable.create<Int> {
-            val powerOn = Detonator.poweron(5, 1)
-            this.powerOn = powerOn
+            if(BlastDelegate.getDelegate().isDebug()){
+                this.powerOn = 0
+            } else {
+                if(OtgUtils.setDT40CGPIOEnabled(true)){
+                    this.powerOn = 0
+                } else {
+                    this.powerOn = -1
+                }
+            }
             it.onNext(powerOn)
         }.subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -63,7 +71,7 @@ class SerialManager {
     fun closePower(onNext: Consumer<Int>): Disposable {
         return Observable.create<Int> {
             closePort()
-            val powerOn = Detonator.poweron(5, 0)
+            OtgUtils.setDT40CGPIOEnabled(false)
             portOpenState = -1
             this.powerOn = -1
             it.onNext(powerOn)
@@ -83,7 +91,7 @@ class SerialManager {
      *        -3：无法打开串口：参数错误！
      */
     fun openPort(): Int {
-        portOpenState = BlastSerial.instance()!!.open("/dev/ttyS6", 57600)
+        portOpenState = BlastSerial.instance()!!.open("/dev/ttyHSL0", 115200)
         return portOpenState
     }
 

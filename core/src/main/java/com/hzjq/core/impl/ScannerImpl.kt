@@ -6,9 +6,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.device.ScanManager
 import android.device.scanner.configuration.PropertyID
-import com.hzjq.core.bean.CapEntity
+import android.device.scanner.configuration.Triggering
+import com.hzjq.core.BlastDelegate
+import com.hzjq.core.callback.OnScannerCapCallback
 import com.hzjq.core.loader.ScannerLoader
-import io.reactivex.functions.Consumer
+import com.hzjq.core.util.BlastLog
+import com.hzjq.core.util.Convert
 
 class ScannerImpl : ScannerLoader {
 
@@ -26,7 +29,7 @@ class ScannerImpl : ScannerLoader {
     )
     private var action_value_buf = arrayOf(ScanManager.ACTION_DECODE, ScanManager.BARCODE_STRING_TAG)
     private var value_buff: IntArray = IntArray(6)
-    private var callback: Consumer<CapEntity>? = null
+    private var callback: OnScannerCapCallback? = null
 
     private val mScanReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -39,8 +42,17 @@ class ScannerImpl : ScannerLoader {
                 barcodeStr = new String(barcode, 0, barcodelen);
             else
                 barcodeStr = intent.getStringExtra("barcode_string");*/
+            BlastLog.e("barcode:${barcode}  barcodelen:${barcodelen} temp:${temp} result:${result}")
             if (result != null) {
-
+                val b = Convert.isHexStr(result)
+                if(b){
+                    if(result.length >= 54){
+                        val cap = BlastDelegate.getDelegate().getParseLoader().parseCap(result)
+                        callback?.onScannerCapResult(cap)
+                        return
+                    }
+                }
+                callback?.onScannerCapFailed(result)
             }
         }
     }
@@ -59,9 +71,20 @@ class ScannerImpl : ScannerLoader {
         val filter = IntentFilter()
         filter.addAction(action_value_buf[0])
         context.registerReceiver(mScanReceiver,filter)
+        mScanManager!!.triggerMode = /*if (b) Triggering.CONTINUOUS else */
+            Triggering.HOST
+       // mScanManager!!.scannerType =
     }
 
-    override fun setScannerResultCallback(callback: Consumer<CapEntity>) {
+    override fun startDecode() {
+        mScanManager?.startDecode()
+    }
+
+    override fun stopDecode() {
+        mScanManager?.stopDecode()
+    }
+
+    override fun setScannerResultCallback(callback: OnScannerCapCallback) {
         this.callback = callback
     }
 

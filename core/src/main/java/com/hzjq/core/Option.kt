@@ -29,6 +29,7 @@ class Option {
     private lateinit var sendMessageLoader: OnSendMessageLoader
     private lateinit var parseLoader: ParseLoader
     private lateinit var onUpgradeExitLoader: OnUpgradeExitLoader
+    private lateinit var scannerLoader:ScannerLoader
 
 
 
@@ -182,6 +183,17 @@ class Option {
 
     fun getBlastLoader(): OnBlastLoader {
         return blastLoader
+    }
+
+
+    fun setScannerLoader(scannerLoader:ScannerLoader):Option{
+        this.scannerLoader = scannerLoader
+        return this
+    }
+
+
+    fun getScannerLoader():ScannerLoader{
+        return this.scannerLoader
     }
 
     fun setChargeLoader(chargeLoader: OnChargeLoader): Option {
