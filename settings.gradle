@@ -1,2 +1,2 @@
-include ':app', ':core', ':vioserial', ':sdklibrary'
+include ':app', ':core'
 rootProject.name='blast'

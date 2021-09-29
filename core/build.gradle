@@ -34,6 +34,12 @@ android {
             dirs 'libs'
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
 }
 
 dependencies {
@@ -48,9 +54,7 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.1.1'
     //noinspection GradleDependency
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation project(':vioserial')
     api(name:"DeviceManager_LXR5000-V1.3_20210330", ext: 'aar')
-    api project(':sdklibrary')
     api 'org.greenrobot:eventbus:3.1.1'
 }
 

@@ -1,12 +1,13 @@
 package com.vi.vioserial;
 
 import android.text.TextUtils;
-import com.vi.vioserial.listener.OnNormalDataListener;
-import com.vi.vioserial.listener.OnSerialDataListener;
-import com.vi.vioserial.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.vi.vioserial.listener.OnNormalDataListener;
+import com.vi.vioserial.listener.OnSerialDataListener;
+import com.vi.vioserial.util.Logger;
 
 /**
  * @author Vi
