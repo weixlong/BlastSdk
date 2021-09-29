@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 //==============================JitPack 上传插件配置 start=====================
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.gitee.wwwxxxlll_375'
+group='com.github.weixlong'
 
 android {
     compileSdkVersion 30
