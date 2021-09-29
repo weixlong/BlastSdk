@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context=".MainActivity">
+    android:orientation="horizontal">
 
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -48,12 +48,20 @@
                     android:text="扫描头扫描雷管，扫描到雷管返回雷管信息" />
 
 
+
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:onClick="onScannerCap"
+                    android:id="@+id/onScannerCap"
                     android:text="扫描头扫描雷管" />
+
+                <EditText
+                    android:id="@+id/mainScanResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp" />
 
 
                 <TextView

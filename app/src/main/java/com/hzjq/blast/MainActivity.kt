@@ -3,6 +3,9 @@ package com.hzjq.blast
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -18,7 +21,7 @@ import org.greenrobot.eventbus.ThreadMode
 import pub.devrel.easypermissions.EasyPermissions
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
-class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var mLogAdapter: LogAdapter
     private val caps = arrayListOf<CapEntity>()
@@ -37,23 +40,22 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
             .openScanner(this)
 
         Blast.getInstance().getScannerLoader()
-            .setScannerResultCallback(object : OnScannerCapCallback{
-                override fun onScannerCapResult(cap: CapEntity) {
-                    BlastLog.e("onScannerCapResult:${cap}")
-                }
+            .setMode(mainScanResult,1)
 
-                override fun onScannerCapFailed(result: String) {
-                    BlastLog.e("onScannerCapFailed:${result}")
-                }
-
-            })
+        onScannerCap()
     }
 
-    private fun reqPermissions(){
-        EasyPermissions.requestPermissions(this,"打开串口，需要文件操作权限",111,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+    private fun reqPermissions() {
+        EasyPermissions.requestPermissions(
+            this,
+            "打开串口，需要文件操作权限",
+            111,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        )
     }
 
-    private fun hasPermission():Boolean{
+    private fun hasPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -62,19 +64,46 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun addLog(log: LogBean) {
-        if(mLogAdapter.count > 499){
+        if (mLogAdapter.count > 499) {
             mLogAdapter.remove(mLogAdapter.getItem(0))
         }
         mLogAdapter.add(log)
     }
 
 
-    fun onScannerCap(view: View) {
-        Blast.getInstance().getScannerLoader().startDecode()
+    private fun onScannerCap() {
+        onScannerCap.setOnTouchListener { v, event ->
+            val action = event.action
+            when (action) {
+                MotionEvent.ACTION_DOWN -> {
+                    Blast.getInstance().getScannerLoader().startDecode()
+                }
+                MotionEvent.ACTION_UP -> {
+                    Blast.getInstance().getScannerLoader().stopDecode()
+                }
+            }
+            true
+        }
+
+        mainScanResult.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                BlastLog.e(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
     }
 
     fun getVersion(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -96,7 +125,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
     }
 
     fun upgradeVersion(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -125,7 +154,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
     }
 
     fun exitUpgradeMode(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -147,7 +176,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
     @SuppressLint("SetTextI18n")
     fun onScanCapClick(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -179,7 +208,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
 
     fun onUnderCapClick(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -213,7 +242,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
 
     fun onAuthCapClick(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -243,7 +272,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
 
     fun onChargeCapClick(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -278,7 +307,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
 
     fun onBlastCapClick(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -311,7 +340,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
 
     fun onQuickUnderAuthClick(view: View) {
-        if(!hasPermission()) {
+        if (!hasPermission()) {
             reqPermissions()
             return
         }
@@ -345,6 +374,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks{
 
     override fun onDestroy() {
         super.onDestroy()
+        Blast.getInstance().getScannerLoader().closeScanner(this)
         EventBus.getDefault().unregister(this)
     }
 
