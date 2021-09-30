@@ -30,6 +30,7 @@ class Option {
     private lateinit var parseLoader: ParseLoader
     private lateinit var onUpgradeExitLoader: OnUpgradeExitLoader
     private lateinit var scannerLoader:ScannerLoader
+    private lateinit var alongCapCheckLoader:AlongCapCheckLoader
 
 
 
@@ -73,6 +74,15 @@ class Option {
 
     fun getBlastOutTime():Long{
         return blastOutTime
+    }
+
+    fun setAlongCapCheckLoader(alongCapCheckLoader:AlongCapCheckLoader):Option{
+        this.alongCapCheckLoader = alongCapCheckLoader
+        return this
+    }
+
+    fun getAlongCapCheckLoader():AlongCapCheckLoader{
+        return this.alongCapCheckLoader
     }
 
     fun setMaxSupportCapCount(maxSupportCapCount:Int):Option{

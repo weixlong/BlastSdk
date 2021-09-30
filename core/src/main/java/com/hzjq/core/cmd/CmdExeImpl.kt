@@ -4,6 +4,8 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
+import com.hzjq.core.bean.ErrorResult
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.loader.CmdExeLoader
 import com.hzjq.core.receive.Receives
@@ -25,7 +27,7 @@ class CmdExeImpl : CmdExeLoader {
                         else BlastDelegate.getDelegate().getOutTimeRetryCount()
                     if (b) {
                         Receives.getInstance().onCallbackCmdFailed(cmd)
-                        callback?.onError(if (openPortCallback.isFailedRetry) -63 else -10)
+                        callback?.onError( ErrorCode.getErrorResult(if (openPortCallback.isFailedRetry)-25 else -26))
                         cancel()
                         return
                     }
@@ -106,7 +108,7 @@ class CmdExeImpl : CmdExeLoader {
             }
         }
 
-        override fun onError(errorCode: Int) {
+        override fun onError(errorCode: ErrorResult) {
 
         }
 

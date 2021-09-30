@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.bean.ChargeProgressEntity
 import com.hzjq.core.callback.Callback
@@ -47,7 +48,7 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
 
                     override fun failed() {
                         onProgressChanged(100, "充电失败")
-                        callback?.onError(-54)
+                        callback?.onError(ErrorCode.getErrorResult(-7))
                         onDestroy()
                     }
 

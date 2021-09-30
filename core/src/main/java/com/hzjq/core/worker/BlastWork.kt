@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
@@ -26,7 +27,7 @@ class BlastWork : Work<CapResultEntity> {
 
                     override fun failed() {
                         onProgressChanged(100,"爆破失败")
-                        callback?.onError(-56)
+                        callback?.onError(ErrorCode.getErrorResult(-6))
                         doNext(false,System.currentTimeMillis())
                     }
 

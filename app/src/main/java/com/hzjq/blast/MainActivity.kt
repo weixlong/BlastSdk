@@ -102,6 +102,31 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     }
 
+
+    fun onCheckAlongCap(view: View) {
+        if (!hasPermission()) {
+            reqPermissions()
+            return
+        }
+        Blast.getInstance().getAlongCapCheckLoader()
+            .start(object : Callback<AlongCapResultEntity>{
+
+                override fun onResult(t: AlongCapResultEntity) {
+                    alongCapView.text = "onResult (mVoltage:${t.mVoltage} mElectric:${t.mElectric} uid:${t.uid})"
+                }
+
+                override fun onRetryCountChanged(retryCount: Int, action: String) {
+                    alongCapView.text = "onRetryCountChanged retryCount:${retryCount}  action:${action}"
+                }
+
+                override fun onError(errorCode: ErrorResult) {
+                    alongCapView.text = "onError errorCode:${errorCode.errorAction}"
+                }
+
+            })
+
+    }
+
     fun getVersion(view: View) {
         if (!hasPermission()) {
             reqPermissions()
@@ -117,8 +142,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 versionView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                versionView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                versionView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -144,8 +169,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                     upgradeVersionView.text = "retryCount:${retryCount}  action:${action}"
                 }
 
-                override fun onError(errorCode: Int) {
-                    upgradeVersionView.text = "onError:${errorCode}"
+                override fun onError(errorCode: ErrorResult) {
+                    upgradeVersionView.text = "onError:${errorCode.errorAction}"
                 }
 
             })
@@ -167,8 +192,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 exitUpgradeProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                exitUpgradeProgressView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                exitUpgradeProgressView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -199,8 +224,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 scanCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                scanCapProgressView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                scanCapProgressView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -233,8 +258,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 underCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                underCapProgressView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                underCapProgressView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -263,8 +288,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 authCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                authCapProgressView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                authCapProgressView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -298,8 +323,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 chargeCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                chargeCapProgressView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                chargeCapProgressView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -330,8 +355,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 blastCapProgressView.text = "retryCount:${retryCount}  action:${action}"
             }
 
-            override fun onError(errorCode: Int) {
-                blastCapProgressView.text = "onError:${errorCode}"
+            override fun onError(errorCode: ErrorResult) {
+                blastCapProgressView.text = "onError:${errorCode.errorAction}"
             }
 
         })
@@ -362,8 +387,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                     quickCapProgressView.text = "retryCount:${retryCount}  action:${action}"
                 }
 
-                override fun onError(errorCode: Int) {
-                    quickCapProgressView.text = "onError:${errorCode}"
+                override fun onError(errorCode: ErrorResult) {
+                    quickCapProgressView.text = "onError:${errorCode.errorAction}"
                 }
             }, Consumer {
                 quickCapProgressView.text = "onError:${it.errorCode}"
@@ -385,6 +410,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
 
     }
+
+
 
 
 }

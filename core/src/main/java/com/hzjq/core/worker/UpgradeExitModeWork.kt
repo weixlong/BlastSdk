@@ -2,6 +2,7 @@ package com.hzjq.core.worker
 
 import com.hzjq.core.AckCode
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
 import com.hzjq.core.receive.Receiver
@@ -41,14 +42,14 @@ class UpgradeExitModeWork : Work<Int> {
                         callback?.onResult(AckCode.EXIT_UPGRADE_MODE_OK)
                     } else {
                         onProgressChanged(100, "退出升级模式失败")
-                        callback?.onError(-7)
+                        callback?.onError(ErrorCode.getErrorResult(-22))
                         onDestroy()
                     }
                 }
 
                 override fun failed() {
                     onProgressChanged(100, "退出升级模式失败")
-                    callback?.onError(-7)
+                    callback?.onError(ErrorCode.getErrorResult(-22))
                     onDestroy()
                 }
             })

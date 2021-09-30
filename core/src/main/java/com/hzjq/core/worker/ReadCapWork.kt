@@ -2,6 +2,7 @@ package com.hzjq.core.worker
 
 import android.text.TextUtils
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.Callback
@@ -62,14 +63,14 @@ class ReadCapWork : Work<CapEntity> {
                                 checkMaxLimitCap(msg)
                             } else {
                                 onProgressChanged(100, "读取雷管信息失败")
-                                callback?.onError(-62)
+                                callback?.onError(ErrorCode.getErrorResult(-15))
                                 onDestroy()
                             }
                         }
 
                         override fun failed() {
                             onProgressChanged(100, "读取雷管信息失败")
-                            callback?.onError(-13)
+                            callback?.onError(ErrorCode.getErrorResult(-16))
                             onDestroy()
                         }
 

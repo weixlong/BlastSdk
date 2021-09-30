@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
@@ -28,6 +29,7 @@ class InnerAuthModeWork : Work<CapProgressEntity> {
 
                     override fun failed() {
                         onProgressChanged(100, "进入授权模式失败")
+                        callback?.onError(ErrorCode.getErrorResult(-13))
                         onDestroy()
                     }
 

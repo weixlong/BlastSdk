@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.Callback
@@ -64,8 +65,8 @@ class UnderCapWork : Work<CapResultEntity> {
                 }
 
                 override fun failed() {
-                    onProgressChanged(100, "正在下传雷管信息失败")
-                    callback?.onError(-15)
+                    onProgressChanged(100, "下传雷管信息失败")
+                    callback?.onError(ErrorCode.getErrorResult(-21))
                     onDestroy()
                 }
 

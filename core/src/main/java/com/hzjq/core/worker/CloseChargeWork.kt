@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
 import com.hzjq.core.receive.Receiver
@@ -28,7 +29,7 @@ class CloseChargeWork : Work<Boolean> {
 
                     override fun failed() {
                         onProgressChanged(100,"下电失败")
-                        callback?.onError(-55)
+                        callback?.onError(ErrorCode.getErrorResult(-12))
                         onDestroy()
                     }
 

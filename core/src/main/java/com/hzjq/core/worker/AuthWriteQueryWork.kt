@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
@@ -50,7 +51,7 @@ class AuthWriteQueryWork : Work<CapProgressEntity> {
 
                         override fun failed() {
                             onProgressChanged(100, "授权查询失败")
-                            callback?.onError(-52)
+                            callback?.onError(ErrorCode.getErrorResult(-3))
                             onDestroy()
                         }
 

@@ -217,4 +217,20 @@ class AssemblyCmd : AssemblyCmdLoader {
         )
         return cmd
     }
+
+    override fun getAlongCheckCmd(): Cmd {
+        val cmd = Cmd(
+            "",
+            "",
+            CmdCode.ALONG_CHECK_CMD,
+            18
+        )
+        cmd.key = Cmd.Key(
+            "23",
+            "3112",
+            8,
+            12
+        )
+        return cmd
+    }
 }

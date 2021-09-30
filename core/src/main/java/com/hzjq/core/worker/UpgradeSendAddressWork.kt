@@ -1,6 +1,8 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
+import com.hzjq.core.bean.ErrorResult
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
 import com.hzjq.core.receive.Receiver
@@ -101,14 +103,14 @@ class UpgradeSendAddressWork : Work<Int> {
                         VersionWork(callback).doWork()
                     } else {
                         onProgressChanged(100,"退出升级模式失败")
-                        callback?.onError(-7)
+                        callback?.onError(ErrorCode.getErrorResult(-22))
                         onDestroy()
                     }
                 }
 
-                override fun onError(errorCode: Int) {
+                override fun onError(errorCode: ErrorResult) {
                     onProgressChanged(100,"退出升级模式失败")
-                    callback?.onError(-7)
+                    callback?.onError(errorCode)
                     onDestroy()
                 }
 

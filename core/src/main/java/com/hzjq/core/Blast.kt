@@ -35,6 +35,14 @@ class Blast {
         BlastDelegate.getDelegate().setDebug(debug)
     }
 
+
+    /**
+     * 获取单发检测器
+     */
+    fun getAlongCapCheckLoader():AlongCapCheckLoader{
+        return BlastDelegate.getDelegate().getAlongCapCheckLoader()
+    }
+
     /**
      * 获取扫描加载器
      */

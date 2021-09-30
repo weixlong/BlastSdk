@@ -3,6 +3,7 @@ package com.hzjq.core.impl
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.bean.CapResultEntity
+import com.hzjq.core.bean.ErrorResult
 import com.hzjq.core.callback.ProgressCallback
 import com.hzjq.core.loader.OnQuickRegisterLoader
 import com.hzjq.core.work.Works
@@ -24,7 +25,7 @@ class QuickRegisterImpl : OnQuickRegisterLoader {
                 callback.onRetryCountChanged(retryCount, action)
             }
 
-            override fun onError(errorCode: Int) {
+            override fun onError(errorCode: ErrorResult) {
                 callback.onError(errorCode)
             }
 
@@ -42,7 +43,7 @@ class QuickRegisterImpl : OnQuickRegisterLoader {
                 callback.onRetryCountChanged(retryCount, action)
             }
 
-            override fun onError(errorCode: Int) {
+            override fun onError(errorCode: ErrorResult) {
                 callback.onError(errorCode)
             }
 
@@ -72,7 +73,7 @@ class QuickRegisterImpl : OnQuickRegisterLoader {
                 callback.onRetryCountChanged(retryCount, action)
             }
 
-            override fun onError(errorCode: Int) {
+            override fun onError(errorCode: ErrorResult) {
                 callback.onError(errorCode)
             }
 

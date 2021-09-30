@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
 import com.hzjq.core.receive.Receiver
@@ -24,8 +25,8 @@ class VersionWork : Work<Int> {
                     override fun onSuccess(msg: Any) {
                         val version = msg as Int
                         if (version == 0) {
-                            onProgressChanged(100,"正在获取当前版本失败")
-                            callback?.onError(-5)
+                            onProgressChanged(100,"获取当前版本失败")
+                            callback?.onError(ErrorCode.getErrorResult(-24))
                         } else {
                             onProgressChanged(100,"正在获取当前版本成功")
                             callback?.onResult(version)
@@ -34,7 +35,8 @@ class VersionWork : Work<Int> {
                     }
 
                     override fun failed() {
-                        callback?.onError(-5)
+                        onProgressChanged(100,"获取当前版本失败")
+                        callback?.onError(ErrorCode.getErrorResult(-24))
                         onDestroy()
                     }
                 })

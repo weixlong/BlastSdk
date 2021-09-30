@@ -1,5 +1,7 @@
 package com.hzjq.core.callback
 
+import com.hzjq.core.bean.ErrorResult
+
 interface Callback<T> {
 
 
@@ -16,5 +18,5 @@ interface Callback<T> {
     /**
      * 请对照错误码进行错误原因分析
      */
-    fun onError(errorCode:Int)
+    fun onError(errorCode: ErrorResult)
 }

@@ -3,6 +3,7 @@ package com.hzjq.core.parse
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.bean.AlongCapResultEntity
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.util.CapUtil
@@ -77,6 +78,21 @@ class Parser : ParseLoader {
         item.holeNumber = msg.substring(48, 52)
         item.status = Convert.HexToBin8(msg.substring(52, 54))
         item.total = Integer.valueOf(msg.substring(16, 20), 16)
+        return item
+    }
+
+    override fun parseAlongCap(msg: String): AlongCapResultEntity {
+        val item = AlongCapResultEntity()
+        val mVoltage = Integer.valueOf(msg.substring(12, 16), 16)
+        val mElectric = Integer.valueOf(msg.substring(16, 20), 16)
+        item.mElectric = mElectric.toDouble()
+        item.mVoltage = mVoltage*1.0/10
+        if(msg.length > 36) {
+            val uid = msg.substring(20, 36)
+            item.uid = uid
+        } else {
+            item.error = -1
+        }
         return item
     }
 }

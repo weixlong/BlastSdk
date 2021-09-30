@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
 import com.hzjq.core.receive.Receiver
@@ -36,14 +37,14 @@ class UpgradeInnerModeWork : Work<Int> {
                         doNext()
                     } else {
                         onProgressChanged(100, "进入升级模式失败")
-                        callback?.onError(-6)
+                        callback?.onError(ErrorCode.getErrorResult(-23))
                         onDestroy()
                     }
                 }
 
                 override fun failed() {
                     onProgressChanged(100, "进入升级模式失败")
-                    callback?.onError(-6)
+                    callback?.onError(ErrorCode.getErrorResult(-23))
                     onDestroy()
                 }
             })

@@ -1,5 +1,6 @@
 package com.hzjq.core.parse
 
+import com.hzjq.core.bean.AlongCapResultEntity
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapProgressEntity
 import io.reactivex.functions.Consumer
@@ -34,4 +35,8 @@ interface ParseLoader {
      */
     fun parseCap(msg: String):CapEntity
 
+    /**
+     * 解析单发雷管
+     */
+    fun parseAlongCap(msg: String): AlongCapResultEntity
 }

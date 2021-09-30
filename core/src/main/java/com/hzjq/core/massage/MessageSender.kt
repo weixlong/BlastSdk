@@ -2,6 +2,7 @@ package com.hzjq.core.massage
 
 import android.text.TextUtils
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.LogBean
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.loader.OnSendMessageLoader
@@ -24,7 +25,7 @@ class MessageSender : OnSendMessageLoader {
                     SerialManager.getInstance().closePort()
                     openCallback.onResult(false)
                     BlastDelegate.getDelegate().post(Runnable {
-                        callback?.onError(it)
+                        callback?.onError(ErrorCode.getErrorResult(-27))
                     })
                 }
             })
@@ -57,7 +58,21 @@ class MessageSender : OnSendMessageLoader {
                 SerialManager.getInstance().closePort()
                 openCallback.onResult(false)
                 BlastDelegate.getDelegate().post(Runnable {
-                    callback?.onError(i - 1)
+                    when (i) {
+                        -1 -> {
+                            callback?.onError(ErrorCode.getErrorResult(-28))
+                        }
+                        -2 -> {
+                            callback?.onError(ErrorCode.getErrorResult(-29))
+                        }
+                        -3 ->{
+                            callback?.onError(ErrorCode.getErrorResult(-30))
+                        }
+                        -4 ->{
+                            callback?.onError(ErrorCode.getErrorResult(-29))
+                        }
+                    }
+
                 })
             }
         } else {

@@ -45,16 +45,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="扫描头扫描雷管，扫描到雷管返回雷管信息" />
-
-
+                    android:text="扫描头扫描雷管，扫描到雷管返回雷管信息,设置mode时editor为当前页面可视控件，mode为1时有声音0时无声音" />
 
 
                 <Button
+                    android:id="@+id/onScannerCap"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:id="@+id/onScannerCap"
                     android:text="扫描头扫描雷管" />
 
                 <EditText
@@ -62,6 +60,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="单发雷管检测"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="单发雷管检测，AlongCapResultEntity error=0时返回雷管uid，电流(uA)\电压(V)信息" />
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="onCheckAlongCap"
+                    android:text="检测单发雷管" />
+
+                <TextView
+                    android:id="@+id/alongCapView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp" />
+
 
 
                 <TextView

@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import android.text.TextUtils
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.CapResultEntity
 import com.hzjq.core.callback.Callback
@@ -21,12 +22,12 @@ class CheckCapPassWordWork : Work<CapResultEntity> {
         onProgressChanged(0,"正在检查雷管密码")
         if(caps.isNullOrEmpty()){
             onProgressChanged(100,"雷管数据为空,请检查")
-            callback?.onError(-14)
+            callback?.onError(ErrorCode.getErrorResult(-9))
             return
         }
         caps.forEach {
             if (TextUtils.isEmpty(it.password)) {
-                callback?.onError(-14)
+                callback?.onError(ErrorCode.getErrorResult(-10))
                 onDestroy()
                 return
             }

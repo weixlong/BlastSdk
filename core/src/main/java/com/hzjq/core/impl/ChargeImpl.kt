@@ -3,6 +3,7 @@ package com.hzjq.core.impl
 import android.text.TextUtils
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.bean.ChargeProgressEntity
+import com.hzjq.core.bean.ErrorResult
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.callback.ProgressCallback
 import com.hzjq.core.loader.OnChargeLoader
@@ -58,7 +59,7 @@ class ChargeImpl : OnChargeLoader {
                 callback.onRetryCountChanged(retryCount, action)
             }
 
-            override fun onError(errorCode: Int) {
+            override fun onError(errorCode: ErrorResult) {
                 callback.onError(errorCode)
             }
 

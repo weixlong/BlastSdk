@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
@@ -28,7 +29,7 @@ class AuthWriteWork : Work<CapProgressEntity> {
 
                 override fun failed() {
                     onProgressChanged(100,"写入授权信息失败")
-                    callback?.onError(-51)
+                    callback?.onError(ErrorCode.getErrorResult(-4))
                     onDestroy()
                 }
 

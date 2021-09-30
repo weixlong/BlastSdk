@@ -114,4 +114,9 @@ interface AssemblyCmdLoader {
      * 获取起爆后的循环查询指令
      */
     fun getBlastCycleQueryCmd(): Cmd
+
+    /**
+     * 单发查询指令
+     */
+    fun getAlongCheckCmd():Cmd
 }

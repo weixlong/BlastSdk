@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapProgressEntity
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
@@ -41,16 +42,21 @@ class AuthQueryWork : Work<CapProgressEntity> {
                                         doNext(progress)
                                     }
                                 } else {
-                                    onProgressChanged(100, "扫描授权信息失败")
-                                    callback?.onError(CapProgressEntity.convertStateCode(msg.stateCode))
-                                    onDestroy()
+                                    if(ErrorCode.getRetryResult(msg.stateCode) == null) {
+                                        onProgressChanged(100, "扫描授权信息失败")
+                                        callback?.onError(ErrorCode.getErrorResult(msg.stateCode))
+                                        onDestroy()
+                                    } else {
+                                        val result = ErrorCode.getRetryResult(msg.stateCode)
+                                        onProgressChanged(progress, result!!.errorAction)
+                                    }
                                 }
                             }
                         }
 
                         override fun failed() {
                             onProgressChanged(100, "扫描授权信息失败")
-                            callback?.onError(-50)
+                            callback?.onError(ErrorCode.getErrorResult(-2))
                             onDestroy()
                         }
 

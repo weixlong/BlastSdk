@@ -1,6 +1,8 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
+import com.hzjq.core.bean.ErrorResult
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.work.Work
 import io.reactivex.functions.Consumer
@@ -25,8 +27,8 @@ class ReadUpgradeFileWork : Work<Int> {
     override fun doWork(vararg args: Any) {
         if(!binFile.exists() || !binFile.name.toLowerCase().endsWith(".bin") || binFile.length() == 0L){
             cancel()
-            onProgressChanged(100,"文件解析失败,请检查文件是否正确")
-            callback?.onError(-8)
+            onProgressChanged(100,"文件解析失败,请检查文件后缀与大小是否正确")
+            callback?.onError(ErrorCode.getErrorResult(-17))
             return
         }
         mSectorDataList.clear()
@@ -39,8 +41,8 @@ class ReadUpgradeFileWork : Work<Int> {
                         onProgressChanged(10,"文件解析成功")
                         doNext(mSectorDataList, mSectorAddrList,0)
                     } else {
-                        onProgressChanged(98,"文件解析失败,请检查文件是否正确")
-                        callback?.onError(-8)
+                        onProgressChanged(98,"文件解析失败,请检查文件内容是否正确")
+                        callback?.onError(ErrorCode.getErrorResult(-18))
                         BlastDelegate.getDelegate().getUpgradeExitLoader()
                             .onUpgradeExit(targetVersion,object : Callback<Boolean>{
                                 override fun onResult(t: Boolean) {
@@ -49,14 +51,14 @@ class ReadUpgradeFileWork : Work<Int> {
                                         onDestroy()
                                     } else {
                                         onProgressChanged(100,"文件解析失败,退出升级模式失败")
-                                        callback?.onError(-7)
+                                        callback?.onError(ErrorCode.getErrorResult(-19))
                                         onDestroy()
                                     }
                                 }
 
-                                override fun onError(errorCode: Int) {
+                                override fun onError(errorCode: ErrorResult) {
                                     onProgressChanged(100,"文件解析失败,退出升级模式失败")
-                                    callback?.onError(-7)
+                                    callback?.onError(errorCode)
                                     onDestroy()
                                 }
 

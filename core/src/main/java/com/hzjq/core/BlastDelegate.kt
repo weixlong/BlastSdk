@@ -17,6 +17,7 @@ class BlastDelegate {
     private var handler: Handler = Handler(Looper.getMainLooper())
 
     private constructor() {
+        ErrorCode.loadErrorCode()
         option.setAuthCapLoader(AuthCapImpl())
             .setBlastLoader(BlastImpl())
             .setChargeLoader(ChargeImpl())
@@ -31,6 +32,7 @@ class BlastDelegate {
             .setParseLoader(Parser())
             .setUpgradeExitLoader(UpgradeExitImpl())
             .setScannerLoader(ScannerImpl())
+            .setAlongCapCheckLoader(AlongCapCheckImpl())
             .setOutTimeRetryCount(3)//接收超时重试次数
             .setFailedRetryCount(3)//接收失败重试次数
             .setCmdType("B0")//起爆器类型
@@ -65,11 +67,19 @@ class BlastDelegate {
     }
 
     /**
+     * 获取单发检测器
+     */
+    fun getAlongCapCheckLoader():AlongCapCheckLoader{
+        return option.getAlongCapCheckLoader()
+    }
+
+    /**
      * 获取扫描器
      */
     fun getScannerLoader():ScannerLoader{
         return option.getScannerLoader()
     }
+
 
     /**
      * 获得升级对出加载器

@@ -1,6 +1,7 @@
 package com.hzjq.core.worker
 
 import com.hzjq.core.BlastDelegate
+import com.hzjq.core.ErrorCode
 import com.hzjq.core.bean.CapEntity
 import com.hzjq.core.callback.Callback
 import com.hzjq.core.massage.DataMessageBean
@@ -31,7 +32,7 @@ abstract class InnerScanModeWork : Work<CapEntity> {
 
                     override fun failed() {
                         onProgressChanged(100,"进入扫描模式失败")
-                        callback?.onError(-11)
+                        callback?.onError(ErrorCode.getErrorResult(-14))
                         onDestroy()
                     }
 
