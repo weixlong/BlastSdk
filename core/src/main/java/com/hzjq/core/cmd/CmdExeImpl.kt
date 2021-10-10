@@ -16,29 +16,38 @@ class CmdExeImpl : CmdExeLoader {
     private var callback: Callback<Any>? = null
     private var retryCount = 0
     private val SEND_MSG_WHAT = 0x006785
-    private val handler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message) {
-            if (msg.what == SEND_MSG_WHAT) {
-                val cmd = msg.obj as ByteArray
-                if (retryCount > 0) {
-                    val b =
-                        retryCount > if (openPortCallback.isFailedRetry) BlastDelegate.getDelegate()
-                            .getFailedRetryCount()
-                        else BlastDelegate.getDelegate().getOutTimeRetryCount()
-                    if (b) {
-                        Receives.getInstance().onCallbackCmdFailed(cmd)
-                        callback?.onError( ErrorCode.getErrorResult(if (openPortCallback.isFailedRetry)-25 else -26))
-                        cancel()
-                        return
+    private var handler: Handler? = null
+
+    constructor() {
+        makeHandlerSure()
+    }
+
+
+    private fun makeHandlerSure() {
+        handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                if (msg.what == SEND_MSG_WHAT) {
+                    val cmd = msg.obj as ByteArray
+                    if (retryCount > 0) {
+                        val b =
+                            retryCount > if (openPortCallback.isFailedRetry) BlastDelegate.getDelegate()
+                                .getFailedRetryCount()
+                            else BlastDelegate.getDelegate().getOutTimeRetryCount()
+                        if (b) {
+                            Receives.getInstance().onCallbackCmdFailed(cmd)
+                            callback?.onError(ErrorCode.getErrorResult(if (openPortCallback.isFailedRetry) -25 else -26))
+                            cancel()
+                            return
+                        }
+                        callback?.onRetryCountChanged(
+                            retryCount,
+                            if (openPortCallback.isFailedRetry) "失败重试" else "超时重试"
+                        )
                     }
-                    callback?.onRetryCountChanged(
-                        retryCount,
-                        if (openPortCallback.isFailedRetry) "失败重试" else "超时重试"
-                    )
+                    retryCount++
+                    BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
+                    startPoll(cmd)
                 }
-                retryCount++
-                BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
-                startInterval(true, cmd)
             }
         }
     }
@@ -69,15 +78,28 @@ class CmdExeImpl : CmdExeLoader {
     /**
      * 开始轮询结果
      */
-    private fun startInterval(isInterval: Boolean, cmd: ByteArray) {
+    private fun startInterval(cmd: ByteArray) {
+        startPoll(cmd)
+        BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
+    }
+
+    /**
+     * 开始轮询
+     */
+    private fun startPoll(cmd: ByteArray) {
         val message = Message.obtain()
         message.what = SEND_MSG_WHAT
         message.obj = cmd
-        if (isInterval) {
-            handler.sendMessageDelayed(message, BlastDelegate.getDelegate().getReceiveOutTime())
-        } else {
-            cancel()
-            handler.sendMessage(message)
+        val messageDelayed = handler?.sendMessageDelayed(
+            message,
+            BlastDelegate.getDelegate().getReceiveOutTime()
+        )
+        if (!messageDelayed!!) {
+            makeHandlerSure()
+            handler?.sendMessageDelayed(
+                message,
+                BlastDelegate.getDelegate().getReceiveOutTime()
+            )
         }
     }
 
@@ -103,7 +125,7 @@ class CmdExeImpl : CmdExeLoader {
                 if (!isPoll) {
                     BlastDelegate.getDelegate().getOnSendMessageLoader().sendData(cmd)
                 } else {
-                    startInterval(false, cmd)
+                    startInterval( cmd)
                 }
             }
         }
@@ -119,7 +141,7 @@ class CmdExeImpl : CmdExeLoader {
 
     override fun cancel() {
         retryCount = 0
-        handler.removeMessages(SEND_MSG_WHAT)
-        handler.removeCallbacksAndMessages(-1)
+        handler?.removeMessages(SEND_MSG_WHAT)
+        handler?.removeCallbacksAndMessages(-1)
     }
 }

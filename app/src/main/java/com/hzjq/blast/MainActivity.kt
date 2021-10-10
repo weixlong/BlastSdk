@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         Blast.getInstance().getScannerLoader()
             .openScanner(this)
-
         Blast.getInstance().getScannerLoader()
             .setMode(mainScanResult,1)
 

@@ -20,6 +20,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
 
+        ndk {
+            //设置目前支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters  "armeabi-v7a","x86","arm64-v8a","x86","x86_64"//, "armeabi-v7a", "arm64-v8a", "x86","x86_64"
+        }
     }
 
     buildTypes {
@@ -88,6 +92,13 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
+
+tasks.withType(Jar){jarTask->
+    if(jarTask.name.equals('packageReleaseJar')){
+        jarTask.from android.sourceSets.main.java.srcDirs
+    }
+}
+
 //// 打包源码
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
