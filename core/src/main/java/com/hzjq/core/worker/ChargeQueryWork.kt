@@ -15,6 +15,7 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
     constructor(callback: Callback<ChargeProgressEntity>?) : super(callback)
 
     override fun doWork(vararg args: Any) {
+        val cpe = ChargeProgressEntity()
         Receives.getInstance()
             .registerReceiver(
                 BlastDelegate.getDelegate().getAssemblyCmdLoader().getChargeCycleQueryCmd()
@@ -25,6 +26,13 @@ class ChargeQueryWork : Work<ChargeProgressEntity> {
 
                     override fun onSuccess(msg: Any) {
                         if (msg is CapProgressEntity) {
+                            cpe.isEnd = false
+                            cpe.mElectric = msg.mElectric
+                            cpe.mVoltage = msg.mVoltage
+                            cpe.progress = msg.progress
+                            cpe.stateCode = msg.stateCode
+                            callback?.onResult(cpe)
+
                             if (msg.mElectric == 0.0 && msg.mVoltage == 0.0) {//充电异常
                                 doNext(0)//查询雷管数据
                                 return
