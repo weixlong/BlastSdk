@@ -1,7 +1,5 @@
 package com.hzjq.core
 
-import android.os.Handler
-import android.os.Looper
 import com.hzjq.core.cmd.AssemblyCmd
 import com.hzjq.core.cmd.CmdExeImpl
 import com.hzjq.core.impl.*
@@ -9,12 +7,16 @@ import com.hzjq.core.loader.*
 import com.hzjq.core.massage.MessageSender
 import com.hzjq.core.parse.ParseLoader
 import com.hzjq.core.parse.Parser
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 class BlastDelegate {
 
     private val option: Option = Option()
 
-    private var handler: Handler = Handler(Looper.getMainLooper())
+    private var handlerDisposable: Disposable? = null
 
     private constructor() {
         ErrorCode.loadErrorCode()
@@ -55,28 +57,28 @@ class BlastDelegate {
     /**
      * 是否测试
      */
-    fun setDebug(debug:Boolean){
+    fun setDebug(debug: Boolean) {
         option.setDebug(debug)
     }
 
     /**
      * 是否测试
      */
-    fun isDebug():Boolean{
+    fun isDebug(): Boolean {
         return option.isDebug()
     }
 
     /**
      * 获取单发检测器
      */
-    fun getAlongCapCheckLoader():AlongCapCheckLoader{
+    fun getAlongCapCheckLoader(): AlongCapCheckLoader {
         return option.getAlongCapCheckLoader()
     }
 
     /**
      * 获取扫描器
      */
-    fun getScannerLoader():ScannerLoader{
+    fun getScannerLoader(): ScannerLoader {
         return option.getScannerLoader()
     }
 
@@ -84,49 +86,49 @@ class BlastDelegate {
     /**
      * 获得升级对出加载器
      */
-    fun getUpgradeExitLoader():OnUpgradeExitLoader{
+    fun getUpgradeExitLoader(): OnUpgradeExitLoader {
         return option.getOnUpgradeExitLoader()
     }
 
     /**
      * 获取串口写入数据的休眠时间（ms）
      */
-    fun getSerialWriteSleepTime():Long{
+    fun getSerialWriteSleepTime(): Long {
         return option.getSerialWriteSleepTime()
     }
 
     /**
      * 获取串口读取数据的休眠时间
      */
-    fun getSerialReadSleepTime():Long{
+    fun getSerialReadSleepTime(): Long {
         return option.getSerialReadSleepTime()
     }
 
     /**
      * 支持的最大雷管数
      */
-    fun getMaxSupportCapCount():Int{
+    fun getMaxSupportCapCount(): Int {
         return option.getMaxSupportCapCount()
     }
 
     /**
      * 是否写人延时
      */
-    fun setDelayWriteData(isWrite:Boolean){
+    fun setDelayWriteData(isWrite: Boolean) {
         option.setDelayWriteData(isWrite)
     }
 
     /**
      * 起爆超时时间
      */
-    fun getBlastOutTime():Long{
+    fun getBlastOutTime(): Long {
         return option.getBlastOutTime()
     }
 
     /**
      * 是否写人延时
      */
-    fun isDelayWriteData():Boolean{
+    fun isDelayWriteData(): Boolean {
         return option.isDelayWriteData()
     }
 
@@ -134,14 +136,14 @@ class BlastDelegate {
     /**
      * 获取超时重试次数
      */
-    fun getOutTimeRetryCount():Int{
+    fun getOutTimeRetryCount(): Int {
         return option.getOutTimeRetryCount()
     }
 
     /**
      * 获取超时重试次数
      */
-    fun getFailedRetryCount():Int{
+    fun getFailedRetryCount(): Int {
         return option.getFailedRetryCount()
     }
 
@@ -149,7 +151,7 @@ class BlastDelegate {
     /**
      * 升级时写入地址失败次数
      */
-    fun getUpgradeWriteRetryCount():Int{
+    fun getUpgradeWriteRetryCount(): Int {
         return option.getUpgradeWriteRetryCount()
     }
 
@@ -163,14 +165,14 @@ class BlastDelegate {
     /**
      * 获得接收超时时间
      */
-    fun getReceiveOutTime():Long{
+    fun getReceiveOutTime(): Long {
         return option.getReceiveOutTime()
     }
 
     /**
      * 获得解析器
      */
-    fun getParseLoader(): ParseLoader{
+    fun getParseLoader(): ParseLoader {
         return option.getParseLoader()
     }
 
@@ -192,7 +194,7 @@ class BlastDelegate {
     /**
      * 获取消息发送器
      */
-    fun getOnSendMessageLoader():OnSendMessageLoader{
+    fun getOnSendMessageLoader(): OnSendMessageLoader {
         return option.getOnSendMessageLoader()
     }
 
@@ -262,7 +264,15 @@ class BlastDelegate {
      * 主线程里执行一个任务
      */
     fun post(r: Runnable) {
-        handler.post(r)
+        handlerDisposable?.dispose()
+        handlerDisposable = Observable.create<Int> {
+            it.onNext(0)
+        }.subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                handlerDisposable?.dispose()
+                r.run()
+            }
     }
 
 }

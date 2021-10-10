@@ -1,11 +1,12 @@
 package com.hzjq.core.bean
 
 import org.json.JSONObject
+import java.io.Serializable
 
 /**
  * 雷管实体
  */
-open class CapEntity {
+open class CapEntity :Serializable{
     var uid = "0" //雷管UID
     var capNumber = "0" // 序号
     var delay = "0" // 延时

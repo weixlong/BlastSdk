@@ -37,7 +37,6 @@ class Receives private constructor() {
             val cmd = findReceiverCmd(msg, it.key, it.value)
             if (cmd) {
                 unRegisterReceiver(it.key)
-                BlastDelegate.getDelegate().getCmdExeLoader().cancel()
                 return@forEach
             }
         }
@@ -67,11 +66,13 @@ class Receives private constructor() {
     private fun findReceiverCmd(msg: String, cmd: Cmd, receiver: Receiver): Boolean {
         if (!cmd.keyOk.isNullOrEmpty()) {
             if (msg.startsWith(cmd.keyOk)) {
+                BlastDelegate.getDelegate().getCmdExeLoader().cancel()
                 return onCallbackCmdReceiver(msg, cmd, receiver)
             }
         }
         if (!cmd.keyError.isNullOrEmpty()) {
             if (msg.startsWith(cmd.keyError)) {
+                BlastDelegate.getDelegate().getCmdExeLoader().cancel()
                 BlastDelegate.getDelegate().post(Runnable {
                     receiver.failed()
                 })
@@ -91,6 +92,7 @@ class Receives private constructor() {
                 if (msg.startsWith(cmd.key!!.start)) {
                     val key = msg.substring(cmd.key!!.startIndex, cmd.key!!.endIndex)
                     if (TextUtils.equals(key, cmd.key!!.key)) {
+                        BlastDelegate.getDelegate().getCmdExeLoader().cancel()
                         return onCallbackCmdReceiver(msg, cmd, receiver)
                     }
                 }
