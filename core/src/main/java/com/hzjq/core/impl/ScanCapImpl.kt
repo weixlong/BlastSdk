@@ -14,7 +14,7 @@ class ScanCapImpl : OnScanCapLoader {
 
     override fun onScanCap(callback: OnScanCapCallback) {
         works = Works.Builder.newBuilder()
-            .addWork(ClearChipStateWork(callback))
+            .addWork(ClearChipStateWork(null,callback))
             .addWork(ScanInnerModeWork(callback))
             .addWork(ShipCapScanWork(callback))
             .addWork(ReadCapWork(callback))

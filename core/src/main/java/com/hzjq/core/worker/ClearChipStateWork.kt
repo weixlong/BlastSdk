@@ -14,10 +14,14 @@ import com.hzjq.core.work.Work
  */
 class ClearChipStateWork : Work<CapEntity> {
 
-    constructor(callback: Callback<CapEntity>?) : super(callback)
+    private var caps: MutableList<CapEntity>?=null
+
+    constructor(caps: MutableList<CapEntity>?,callback: Callback<CapEntity>?) : super(callback){
+        this.caps = caps
+    }
 
     override fun doWork(vararg args: Any) {
-        onProgressChanged(1,"正在清除底板状态")
+        onProgressChanged(1,"正在清除底板数据")
         Receives.getInstance().registerReceiver(BlastDelegate.getDelegate().getAssemblyCmdLoader()
             .getClearCmd(),object : Receiver{
             override fun convert(msg: String): Any {
@@ -25,12 +29,16 @@ class ClearChipStateWork : Work<CapEntity> {
             }
 
             override fun onSuccess(msg: Any) {
-                onProgressChanged(2,"正在清除底板状态成功")
-                doNext()
+                onProgressChanged(2,"清除底板数据成功")
+                if(caps == null) {
+                    doNext()
+                } else {
+                    doNext(caps!!)
+                }
             }
 
             override fun failed() {
-                onProgressChanged(100,"清除底板状态失败")
+                onProgressChanged(100,"清除底板数据失败")
                 callback?.onError(ErrorCode.getErrorResult(-11))
                 onDestroy()
             }

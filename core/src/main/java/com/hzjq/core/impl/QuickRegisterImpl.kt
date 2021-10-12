@@ -85,6 +85,7 @@ class QuickRegisterImpl : OnQuickRegisterLoader {
 
         underWorks = Works.Builder.newBuilder()
             .addWork(CheckCapPassWordWork(caps, underCall))
+            .addWork(ClearChipStateWork(caps,capCallback))
             .addWork(UnderCapWork(underCall))
             .addWork(UnderInnerScanModeWork(caps,capCallback))
             .addWork(UnderScanShipWork(underCall,capCallback))

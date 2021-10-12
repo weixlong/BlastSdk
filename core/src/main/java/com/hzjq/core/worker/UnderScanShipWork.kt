@@ -19,6 +19,7 @@ class UnderScanShipWork : ScanShipCapWork {
     }
 
     override fun onDoWorkStart(vararg args: Any) {
+        isContainsNotMatchCap = false
         caps = args[1] as MutableList<CapEntity>
         onProgressChanged((30 + progress * (10f / 100)).toInt(), "正在扫描雷管信息")
     }

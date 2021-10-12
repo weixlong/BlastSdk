@@ -29,6 +29,7 @@ class UnderCapImpl : OnUnderCapLoader {
         }
         works = Works.Builder.newBuilder()
             .addWork(CheckCapPassWordWork(caps, callback))
+            .addWork(ClearChipStateWork(caps,capCallback))
             .addWork(UnderCapWork(callback))
             .addWork(UnderInnerScanModeWork(caps,capCallback))
             .addWork(UnderScanShipWork(callback,capCallback))
