@@ -390,7 +390,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                     quickCapProgressView.text = "onError:${errorCode.errorAction}"
                 }
             }, Consumer {
-                quickCapProgressView.text = "onError:${it.errorCode}"
+                quickCapProgressView.text = "onError:${it.errorCode} 漏接:${it.missCaps?.size}  多接:${it.meetCaps?.size}"
             })
 
     }

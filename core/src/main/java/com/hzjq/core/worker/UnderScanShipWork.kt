@@ -34,7 +34,7 @@ class UnderScanShipWork : ScanShipCapWork {
                 doNext(0,callbackResult!!,caps!!,isContainsNotMatchCap)
             }
         } else {
-            onScanError(progress)
+            doNext(0,callbackResult!!,caps!!,true)
         }
     }
 }

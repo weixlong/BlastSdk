@@ -121,7 +121,7 @@ class ReadCapWork : Work<CapEntity> {
         if (callbackResult != null) {
             val resultEntity = CapResultEntity()
             resultEntity.caps = caps
-            resultEntity.errorCode = if (isContainsNotMatchCap) 0 else -1
+            resultEntity.errorCode = if (!isContainsNotMatchCap) 0 else -1
             resultEntity.meetCaps = meetCaps
             resultEntity.missCaps = missCaps
             callbackResult?.onResult(resultEntity)

@@ -17,7 +17,7 @@ class ErrorCode {
             errorMap[4] = ErrorResult(-4,"雷管检测，雷管数量和方案不一致")
 
             errorMap[20] = ErrorResult(-5,"雷管授权，有新增雷管")
-            errorMap[21] = ErrorResult(-6,"雷管授权，有雷管复位")
+            errorMap[21] = ErrorResult(-6,"雷管授权，存在未授权的雷管")
             errorMap[22] = ErrorResult(-7,"雷管授权，全部雷管授权失败")
             errorMap[23] = ErrorResult(-8,"雷管授权，有雷管授权错误")
 
