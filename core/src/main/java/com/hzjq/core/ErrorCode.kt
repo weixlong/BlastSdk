@@ -71,7 +71,7 @@ class ErrorCode {
             errorMap[-8] = ErrorResult(-43,"进入充电模式失败")
             errorMap[-9] = ErrorResult(-44,"雷管数据为空,请检查")
             errorMap[-10] = ErrorResult(-45,"有雷管密码未设置")
-            errorMap[-11] = ErrorResult(-47,"清除底板状态失败")
+            errorMap[-11] = ErrorResult(-47,"清除底板数据失败")
             errorMap[-12] = ErrorResult(-48,"下电失败")
 
             errorMap[-13] = ErrorResult(-49,"进入授权模式失败")
