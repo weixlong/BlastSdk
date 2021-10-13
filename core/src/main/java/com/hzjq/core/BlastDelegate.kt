@@ -1,5 +1,7 @@
 package com.hzjq.core
 
+import com.hzjq.core.callback.MainRunnable
+import com.hzjq.core.callback.ThreadRunnable
 import com.hzjq.core.cmd.AssemblyCmd
 import com.hzjq.core.cmd.CmdExeImpl
 import com.hzjq.core.impl.*
@@ -77,7 +79,7 @@ class BlastDelegate {
     /**
      * 是否使用最新标准的uid
      */
-    fun isStandardUid():Boolean{
+    fun isStandardUid(): Boolean {
         return option.isStandardUid()
     }
 
@@ -276,14 +278,14 @@ class BlastDelegate {
     /**
      * 清除占用加载器
      */
-    fun getClearOccupyLoader():ClearOccupyLoader{
+    fun getClearOccupyLoader(): ClearOccupyLoader {
         return option.getClearOccupyLoader()
     }
 
     /**
      * 添加拦截器
      */
-    fun addInterceptor(interceptor: ReceiverInterceptor){
+    fun addInterceptor(interceptor: ReceiverInterceptor) {
         ReceiverInterceptorPool.getInstance().addInterceptor(interceptor)
     }
 
@@ -304,11 +306,26 @@ class BlastDelegate {
     }
 
     /**
+     * 子线程执行任务切换到主线程执行任务
+     */
+    fun <T> post(threadRun: ThreadRunnable<T>, mainRun: MainRunnable<T>) {
+        handlerDisposable?.dispose()
+        handlerDisposable = Observable.create<T> {
+            threadRun.run(it)
+        }.subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                handlerDisposable?.dispose()
+                mainRun.run(it)
+            }
+    }
+
+    /**
      * 切换到主线程里执行一个延时任务
      */
-    fun postDelay(delay:Long,r: Runnable) {
+    fun postDelay(delay: Long, r: Runnable) {
         delayHandlerDisposable?.dispose()
-        delayHandlerDisposable = Observable.timer(delay,TimeUnit.MILLISECONDS)
+        delayHandlerDisposable = Observable.timer(delay, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
