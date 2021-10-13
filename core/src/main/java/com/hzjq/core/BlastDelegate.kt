@@ -42,6 +42,7 @@ class BlastDelegate {
             .setFailedRetryCount(3)//接收失败重试次数
             .setCmdType("B0")//起爆器类型
             .setDelayWriteData(true)//开启写入延时方案
+            .setStandardUid(true) //是否使用最新标准的uid
             .setMaxSupportCapCount(600)//支持的最大组网雷管数
             .setBlastOutTime(8000)//起爆超时
             .setReceiveOutTime(2000)//接收超时时间,接收超时时间不得小于读取串口时间+写入休眠时间
@@ -69,6 +70,13 @@ class BlastDelegate {
      */
     fun isDebug(): Boolean {
         return option.isDebug()
+    }
+
+    /**
+     * 是否使用最新标准的uid
+     */
+    fun isStandardUid():Boolean{
+        return option.isStandardUid()
     }
 
     /**

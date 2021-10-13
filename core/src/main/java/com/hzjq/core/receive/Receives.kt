@@ -10,6 +10,10 @@ class Receives private constructor() {
 
     private val receives = HashMap<Cmd, Receiver>()
 
+    private var willRemoveReceiver = arrayListOf<Cmd>()
+
+    private val willAddReceiver = HashMap<Cmd, Receiver>()
+
     private var lock = false
 
     private object B {
@@ -28,25 +32,38 @@ class Receives private constructor() {
     /**
      * 找到对应的接收者并执行
      */
+    @Synchronized
     fun findReceiverDoWork(msg: String) {
         try {
             if (!exeInterceptor(msg)) {
-                if (!lock) {
-                    receives.forEach {
-                        if (lock) {
-                            lock = false
-                            return@forEach
-                        }
-                        val cmd = findReceiverCmd(msg, it.key, it.value)
-                        if (cmd) {
-                            unRegisterReceiver(it.key)
-                            return@forEach
-                        }
+                checkAddAndRemoveCmd()
+                receives.forEach {
+                    val cmd = findReceiverCmd(msg, it.key, it.value)
+                    if (cmd) {
+                        unRegisterReceiver(it.key)
+                        return@forEach
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+
+    /**
+     * 检查是否有新注册的或者已被标记移除的cmd
+     */
+    private fun checkAddAndRemoveCmd(){
+        if(willAddReceiver.isNotEmpty()){
+            receives.putAll(willAddReceiver)
+            willAddReceiver.clear()
+        }
+        if(willRemoveReceiver.isNotEmpty()){
+            willRemoveReceiver.forEach {
+                receives.remove(it)
+            }
+            willRemoveReceiver.clear()
         }
     }
 
@@ -70,7 +87,7 @@ class Receives private constructor() {
      * 注册接收者
      */
     fun registerReceiver(cmd: Cmd, receiver: Receiver) {
-        receives[cmd] = receiver
+        willAddReceiver[cmd] = receiver
     }
 
 
@@ -78,9 +95,7 @@ class Receives private constructor() {
      * 取消注册接收者
      */
     fun unRegisterReceiver(cmd: Cmd) {
-        lock = true
-        receives.remove(cmd)
-        lock = false
+        willRemoveReceiver.add(cmd)
     }
 
 

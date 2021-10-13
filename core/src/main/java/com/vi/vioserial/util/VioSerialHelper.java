@@ -161,10 +161,6 @@ public abstract class VioSerialHelper {
                         buffer = new byte[im];
                         int size = mInputStream.read(buffer);
                         String hexString = SerialDataUtils.byteToStr(buffer,size).trim();
-                        //String hexString = SerialDataUtils.ByteArrToHex(buffer).trim();
-                        if (mSerialDataListener != null) {
-                            mSerialDataListener.onReceive(hexString);
-                        }
                         parseData(hexString);
                     } else {
                         parseData(TAG_END);
@@ -177,7 +173,7 @@ public abstract class VioSerialHelper {
         }
     }
 
-    private String mFullData = "";
+    private StringBuffer mFullData = new StringBuffer();
 
     private void parseData(String tempData) {
         if (tempData.equals(TAG_END) && TextUtils.isEmpty(mFullData)) {
@@ -185,15 +181,15 @@ public abstract class VioSerialHelper {
         }
 
         if (tempData.equals(TAG_END) && !TextUtils.isEmpty(mFullData)) {
-            String trimData = mFullData.trim().replaceAll(" ", "");
+            String trimData = mFullData.toString().trim().replaceAll(" ", "");
             if (mSerialDataListener != null) {
                 mSerialDataListener.onReceiveFullData(trimData);
             }
             onDataReceived(trimData);
-            mFullData = "";
+            mFullData.delete(0,mFullData.length());
             return;
         }
-        mFullData += tempData;
+        mFullData.append(tempData);
     }
 
     public boolean isOpen() {

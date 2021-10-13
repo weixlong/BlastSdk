@@ -9,6 +9,7 @@ class Option {
     private var debug = false
     private var receiveOutTime = 5L//接收超时ms
     private var isDelayWriteData = true//是否写入延时数据
+    private var isStandardUid = false//是否使用最新标准的uid
     private var outTimeRetryCount = 3//超时重试次数
     private var failedRetryCount = 3//失败重试次数
     private var upgradeWriteRetryCount = 3 // 升级写入地址失败次数
@@ -40,6 +41,15 @@ class Option {
 
     fun isDebug(): Boolean {
         return debug
+    }
+
+    fun setStandardUid(isStandard:Boolean):Option{
+        this.isStandardUid = isStandard
+        return this
+    }
+
+    fun isStandardUid():Boolean{
+        return isStandardUid
     }
 
     fun setSerialWriteSleepTime(time: Long): Option {

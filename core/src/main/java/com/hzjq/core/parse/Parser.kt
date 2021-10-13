@@ -78,6 +78,7 @@ class Parser : ParseLoader {
         item.holeNumber = msg.substring(48, 52)
         item.status = Convert.HexToBin8(msg.substring(52, 54))
         item.total = Integer.valueOf(msg.substring(16, 20), 16)
+        item.isStandardUid = BlastDelegate.getDelegate().isStandardUid()
         return item
     }
 

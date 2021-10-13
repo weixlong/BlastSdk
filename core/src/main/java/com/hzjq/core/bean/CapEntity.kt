@@ -19,6 +19,7 @@ open class CapEntity :Serializable{
     var mElectric = 0.0//电流值
     var password = ""//授权密码
     var isScanEnd = false//扫描是否结束，是否是最后一条
+    var isStandardUid = false //是否是新标准的Uid,可忽略
     override fun toString(): String {
         val jsonObject = JSONObject()
         jsonObject.put("uid",uid)
@@ -33,6 +34,7 @@ open class CapEntity :Serializable{
         jsonObject.put("mElectric",mElectric)
         jsonObject.put("password",password)
         jsonObject.put("isScanEnd",isScanEnd)
+        jsonObject.put("isStandardUid",isStandardUid)
         return jsonObject.toString()
     }
 
