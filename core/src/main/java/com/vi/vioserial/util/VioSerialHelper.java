@@ -126,13 +126,20 @@ public abstract class VioSerialHelper {
 
         try {
             mOutputStream.write(bOutArray);
-
+            makeReadThreadAlive();
             if (mSerialDataListener != null) {
                 String hexString = SerialDataUtils.ByteArrToHex(bOutArray).trim();
                 mSerialDataListener.onSend(hexString);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void makeReadThreadAlive(){
+        if(mReadThread == null || !mReadThread.isAlive() || mReadThread.isInterrupted()){
+            mReadThread = new ReadThread();
+            mReadThread.start();
         }
     }
 

@@ -29,17 +29,41 @@ class Receives private constructor() {
      * 找到对应的接收者并执行
      */
     fun findReceiverDoWork(msg: String) {
-        receives.forEach {
-            if (lock) {
-                lock = false
-                return@forEach
+        try {
+            if (!exeInterceptor(msg)) {
+                if (!lock) {
+                    receives.forEach {
+                        if (lock) {
+                            lock = false
+                            return@forEach
+                        }
+                        val cmd = findReceiverCmd(msg, it.key, it.value)
+                        if (cmd) {
+                            unRegisterReceiver(it.key)
+                            return@forEach
+                        }
+                    }
+                }
             }
-            val cmd = findReceiverCmd(msg, it.key, it.value)
-            if (cmd) {
-                unRegisterReceiver(it.key)
-                return@forEach
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+    /**
+     * 执行拦截器
+     */
+    private fun exeInterceptor(msg: String): Boolean {
+        val list = ReceiverInterceptorPool.getInstance().getAllInterceptor()
+        list.forEach {
+            if (!TextUtils.isEmpty(msg) && msg.length >= 30) {
+                val stateCode = Integer.valueOf(msg.substring(28, 30), 16)
+                val b = it.onInterceptor(stateCode)
+                if (b) return true
             }
         }
+        return false
     }
 
     /**

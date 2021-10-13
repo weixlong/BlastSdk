@@ -4,6 +4,7 @@ import com.hzjq.core.callback.Callback
 import com.hzjq.core.callback.OnVersionCallback
 import com.hzjq.core.callback.OnVersionUpgradeCallback
 import com.hzjq.core.loader.*
+import com.hzjq.core.receive.ReceiverInterceptor
 import java.io.File
 
 
@@ -124,5 +125,19 @@ class Blast {
      */
     fun quickRegister():OnQuickRegisterLoader{
        return BlastDelegate.getDelegate().getQuickRegisterLoader()
+    }
+
+    /**
+     * 清除占用加载器
+     */
+    fun getClearOccupyLoader():ClearOccupyLoader{
+        return BlastDelegate.getDelegate().getClearOccupyLoader()
+    }
+
+    /**
+     * 添加拦截器
+     */
+    fun addInterceptor(interceptor: ReceiverInterceptor){
+        BlastDelegate.getDelegate().addInterceptor(interceptor)
     }
 }

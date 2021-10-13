@@ -7,6 +7,8 @@ import com.hzjq.core.loader.*
 import com.hzjq.core.massage.MessageSender
 import com.hzjq.core.parse.ParseLoader
 import com.hzjq.core.parse.Parser
+import com.hzjq.core.receive.ReceiverInterceptor
+import com.hzjq.core.receive.ReceiverInterceptorPool
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -35,6 +37,7 @@ class BlastDelegate {
             .setUpgradeExitLoader(UpgradeExitImpl())
             .setScannerLoader(ScannerImpl())
             .setAlongCapCheckLoader(AlongCapCheckImpl())
+            .setClearOccupyLoader(ClearOccupyImpl())
             .setOutTimeRetryCount(3)//接收超时重试次数
             .setFailedRetryCount(3)//接收失败重试次数
             .setCmdType("B0")//起爆器类型
@@ -259,6 +262,21 @@ class BlastDelegate {
     fun getVersionUpgradeLoader(): OnVersionUpgradeLoader {
         return option.getVersionUpgradeLoader()
     }
+
+    /**
+     * 清除占用加载器
+     */
+    fun getClearOccupyLoader():ClearOccupyLoader{
+        return option.getClearOccupyLoader()
+    }
+
+    /**
+     * 添加拦截器
+     */
+    fun addInterceptor(interceptor: ReceiverInterceptor){
+        ReceiverInterceptorPool.getInstance().addInterceptor(interceptor)
+    }
+
 
     /**
      * 主线程里执行一个任务

@@ -12,7 +12,7 @@ class CmdCode {
         /**===================================控制板start==================================**/
 
         /**
-         * 清除控制板状态
+         * 清除控制板数据
          */
         const val KZB_CLEAR_STATE_CMD = "2307FFA031CC"
 
@@ -63,6 +63,21 @@ class CmdCode {
          */
         const val KZB_QUERY_LG_INFO_OK_ASK = "2313A0FF31AA"
 
+        /**
+         * 清除占用成功
+         */
+        const val KZB_CLEAR_OCCUPY_OK_ASK = "2308A0FF31FF81"
+
+        /**
+         * 清除占用失败
+         */
+        const val KZB_CLEAR_OCCUPY_E_ASK = "2308A0FF31FF80"
+
+        /**
+         * 清除占用
+         */
+        const val KZB_CLEAR_OCCUPY_CMD = "2307FFA031FF"
+
         /**===================================控制板end==================================**/
 
 
@@ -100,6 +115,7 @@ class CmdCode {
          * 写入延时失败
          */
         const val DELAY_INPUT_E_ASK = "2308A0FF310780"
+
 
 
 

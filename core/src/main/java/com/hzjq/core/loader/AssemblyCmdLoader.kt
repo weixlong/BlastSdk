@@ -119,4 +119,10 @@ interface AssemblyCmdLoader {
      * 单发查询指令
      */
     fun getAlongCheckCmd():Cmd
+
+
+    /**
+     * 清除占用
+     */
+    fun sginOut0ccupy():Cmd
 }

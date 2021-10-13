@@ -29,9 +29,9 @@ class Option {
     private lateinit var sendMessageLoader: OnSendMessageLoader
     private lateinit var parseLoader: ParseLoader
     private lateinit var onUpgradeExitLoader: OnUpgradeExitLoader
-    private lateinit var scannerLoader:ScannerLoader
-    private lateinit var alongCapCheckLoader:AlongCapCheckLoader
-
+    private lateinit var scannerLoader: ScannerLoader
+    private lateinit var alongCapCheckLoader: AlongCapCheckLoader
+    private lateinit var clearOccupyLoader: ClearOccupyLoader
 
 
     fun setDebug(debug: Boolean) {
@@ -42,86 +42,86 @@ class Option {
         return debug
     }
 
-    fun setSerialWriteSleepTime(time: Long):Option{
-        if(time < 0)return this
-        if(time + serialReadSleepTime < receiveOutTime){
+    fun setSerialWriteSleepTime(time: Long): Option {
+        if (time < 0) return this
+        if (time + serialReadSleepTime < receiveOutTime) {
             this.serialWriteSleepTime = time
         }
         return this
     }
 
-    fun getSerialWriteSleepTime():Long{
+    fun getSerialWriteSleepTime(): Long {
         return serialWriteSleepTime
     }
 
-    fun setSerialReadSleepTime(time: Long):Option{
-        if(time < 0)return this
-        if(time + serialWriteSleepTime < receiveOutTime){
+    fun setSerialReadSleepTime(time: Long): Option {
+        if (time < 0) return this
+        if (time + serialWriteSleepTime < receiveOutTime) {
             this.serialReadSleepTime = time
         }
         return this
     }
 
-    fun getSerialReadSleepTime():Long{
+    fun getSerialReadSleepTime(): Long {
         return serialReadSleepTime
     }
 
-    fun setBlastOutTime(time: Long):Option{
-        if(time < 0)return this
+    fun setBlastOutTime(time: Long): Option {
+        if (time < 0) return this
         this.blastOutTime = time
         return this
     }
 
-    fun getBlastOutTime():Long{
+    fun getBlastOutTime(): Long {
         return blastOutTime
     }
 
-    fun setAlongCapCheckLoader(alongCapCheckLoader:AlongCapCheckLoader):Option{
+    fun setAlongCapCheckLoader(alongCapCheckLoader: AlongCapCheckLoader): Option {
         this.alongCapCheckLoader = alongCapCheckLoader
         return this
     }
 
-    fun getAlongCapCheckLoader():AlongCapCheckLoader{
+    fun getAlongCapCheckLoader(): AlongCapCheckLoader {
         return this.alongCapCheckLoader
     }
 
-    fun setMaxSupportCapCount(maxSupportCapCount:Int):Option{
-        if(maxSupportCapCount < 0)return this
+    fun setMaxSupportCapCount(maxSupportCapCount: Int): Option {
+        if (maxSupportCapCount < 0) return this
         this.maxSupportCapCount = maxSupportCapCount
         return this
     }
 
-    fun getMaxSupportCapCount():Int{
+    fun getMaxSupportCapCount(): Int {
         return maxSupportCapCount
     }
 
-    fun setOutTimeRetryCount(count:Int):Option{
-        if(count < 0)return this
+    fun setOutTimeRetryCount(count: Int): Option {
+        if (count < 0) return this
         this.outTimeRetryCount = count
         return this
     }
 
-    fun getOutTimeRetryCount():Int{
+    fun getOutTimeRetryCount(): Int {
         return outTimeRetryCount
     }
 
-    fun setFailedRetryCount(count:Int):Option{
-        if(count < 0)return this
+    fun setFailedRetryCount(count: Int): Option {
+        if (count < 0) return this
         this.failedRetryCount = count
         return this
     }
 
-    fun getFailedRetryCount():Int{
+    fun getFailedRetryCount(): Int {
         return failedRetryCount
     }
 
-    fun setUpgradeWriteRetryCount(count: Int):Option{
-        if(count < 0)return this
+    fun setUpgradeWriteRetryCount(count: Int): Option {
+        if (count < 0) return this
         this.upgradeWriteRetryCount = count
         return this
     }
 
-    fun getUpgradeWriteRetryCount():Int{
+    fun getUpgradeWriteRetryCount(): Int {
         return upgradeWriteRetryCount
     }
 
@@ -163,8 +163,8 @@ class Option {
     }
 
     fun setReceiveOutTime(time: Long): Option {
-        if(time < 0)return this
-        if(time >= serialReadSleepTime + serialWriteSleepTime){
+        if (time < 0) return this
+        if (time >= serialReadSleepTime + serialWriteSleepTime) {
             receiveOutTime = time
         }
         return this
@@ -196,13 +196,13 @@ class Option {
     }
 
 
-    fun setScannerLoader(scannerLoader:ScannerLoader):Option{
+    fun setScannerLoader(scannerLoader: ScannerLoader): Option {
         this.scannerLoader = scannerLoader
         return this
     }
 
 
-    fun getScannerLoader():ScannerLoader{
+    fun getScannerLoader(): ScannerLoader {
         return this.scannerLoader
     }
 
@@ -294,5 +294,14 @@ class Option {
     fun setSendMessageLoader(sendMessageLoader: OnSendMessageLoader): Option {
         this.sendMessageLoader = sendMessageLoader
         return this
+    }
+
+    fun setClearOccupyLoader(clearOccupyLoader: ClearOccupyLoader) : Option{
+        this.clearOccupyLoader = clearOccupyLoader
+        return this
+    }
+
+    fun getClearOccupyLoader():ClearOccupyLoader{
+        return clearOccupyLoader
     }
 }

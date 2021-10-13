@@ -233,4 +233,14 @@ class AssemblyCmd : AssemblyCmdLoader {
         )
         return cmd
     }
+
+    override fun sginOut0ccupy(): Cmd {
+        val cmd = Cmd(
+            CmdCode.KZB_CLEAR_OCCUPY_OK_ASK,
+            CmdCode.KZB_CLEAR_OCCUPY_E_ASK,
+            CmdCode.KZB_CLEAR_OCCUPY_CMD,
+            8
+        )
+        return cmd
+    }
 }
