@@ -88,6 +88,9 @@ class Receives private constructor() {
      */
     fun registerReceiver(cmd: Cmd, receiver: Receiver) {
         willAddReceiver[cmd] = receiver
+        if(willRemoveReceiver.contains(cmd)){
+            willRemoveReceiver.remove(cmd)
+        }
     }
 
 
