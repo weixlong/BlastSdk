@@ -13,12 +13,14 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class BlastDelegate {
 
     private val option: Option = Option()
 
     private var handlerDisposable: Disposable? = null
+    private var delayHandlerDisposable: Disposable? = null
 
     private constructor() {
         ErrorCode.loadErrorCode()
@@ -287,7 +289,7 @@ class BlastDelegate {
 
 
     /**
-     * 主线程里执行一个任务
+     * 切换到主线程里执行一个任务
      */
     fun post(r: Runnable) {
         handlerDisposable?.dispose()
@@ -297,6 +299,20 @@ class BlastDelegate {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 handlerDisposable?.dispose()
+                r.run()
+            }
+    }
+
+    /**
+     * 切换到主线程里执行一个延时任务
+     */
+    fun postDelay(delay:Long,r: Runnable) {
+        delayHandlerDisposable?.dispose()
+        delayHandlerDisposable = Observable.timer(delay,TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                delayHandlerDisposable?.dispose()
                 r.run()
             }
     }
